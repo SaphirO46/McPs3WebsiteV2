@@ -1,4 +1,4 @@
-Bien sûr ! Voici la traduction en anglais :
+Bien sûr ! Voici la traduction en anglais : bahaha une note de chat gpt 
 
 ---
 
