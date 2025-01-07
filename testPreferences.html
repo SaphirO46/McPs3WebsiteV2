@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Questionnaire</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css">
+    <style>
+        .score {
+            font-weight: bold;
+            color: #3273dc;
+        }
+        .form-container {
+            max-width: 600px;
+            margin: 0 auto;
+            text-align: center;
+        }
+        input[type="radio"] {
+            width: 25px;
+            height: 25px;
+            margin-right: 10px;
+        }
+    </style>
+</head>
+<body>
+    <section class="section">
+        <div class="container">
+            <div class="form-container">
+                <h1 class="title">Why are you there</h1>
+                <p class="subtitle">Répondez aux questions votre but a votre venue sur minecraftPS3.com</p>
+
+                <form id="questionnaire">
+                    <div class="field">
+                        <label class="label">que preferé vous en jouant a minecraft ps3</label>
+                        <div class="control">
+                            <label class="radio">
+                                <input type="radio" name="question1" value="1000"> S'amuser avec des gens, communiquer, parler
+                            </label>
+                            <br>
+                            <label class="radio">
+                                <input type="radio" name="question1" value="101"> Jouer, se detendre, cree et survivre
+                            </label>
+                            <br>
+                            <label class="radio">
+                                <input type="radio" name="question1" value="10"> Montrer ma superiorité, etre le plus fort
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="field">
+                        <label class="label">quelle mode de jeux preferé vous</label>
+                        <div class="control">
+                            <label class="radio">
+                                <input type="radio" name="question2" value="100"> Survival
+                            </label>
+                            <br>
+                            <label class="radio">
+                                <input type="radio" name="question2" value="101"> Creative
+                            </label>
+                            <br>
+                            <label class="radio">
+                                <input type="radio" name="question2" value="11"> Mini-Jeux
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="field">
+                        <label class="label">Qu'est ce qu'il fait que tu joue encore a minecraft ps3 ?</label>
+                        <div class="control">
+                            <label class="radio">
+                                <input type="radio" name="question3" value="1000"> Les gens
+                            </label>
+                            <br>
+                            <label class="radio">
+                                <input type="radio" name="question3" value="110"> Les mods
+                            </label>
+                            <br>
+                            <label class="radio">
+                                <input type="radio" name="question3" value="101"> Le Jeu
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="field">
+                        <label class="label">Pourrquoi etes vous venu sur minecraft ps3</label>
+                        <div class="control">
+                            <label class="radio">
+                                <input type="radio" name="question4" value="1000"> Trouver des gens avec qui Jouer
+                            </label>
+                            <br>
+                            <label class="radio">
+                                <input type="radio" name="question4" value="110"> Jouer à des jeux avec des mods
+                            </label>
+                            <br>
+                            <label class="radio">
+                                <input type="radio" name="question4" value="1010"> Jouer pour des raisons personnelles
+                            </label>
+                        </div>
+                    </div>
+                    <div class="field">
+                        <label class="label">Que preferai tu entre ses 3 chose :</label>
+                        <div class="control">
+                            <label class="radio">
+                                <input type="radio" name="question5" value="1"> Ameliorer la beaute de minecraft
+                            </label>
+                            <br>
+                            <label class="radio">
+                                <input type="radio" name="question5" value="100"> Ameliorer minecraft au globale
+                            </label>
+                            <br>
+                            <label class="radio">
+                                <input type="radio" name="question5" value="10"> Ajouter des fonctionallités
+                            </label>
+                        </div>
+                    </div>
+                    <div class="field">
+                        <label class="label">Choisi</label>
+                        <div class="control">
+                            <label class="radio">
+                                <input type="radio" name="question6" value="100"> Ajouter 999 Ans d'avancé techologique a l'humanité
+                            </label>
+                            <br>
+                            <label class="radio">
+                                <input type="radio" name="question6" value="10"> Pouvoir Tuer nimporte qui par la pensé nimporte ou
+                            </label>
+                            <br>
+                            <label class="radio">
+                                <input type="radio" name="question6" value="1"> Devenir Dictateur de la russie de la chine et des USA
+                            </label>
+                        </div>
+                    </div>
+                    <div class="field">
+                        <label class="label">Choisi l'un de ses 3 metiers</label>
+                        <div class="control">
+                            <label class="radio">
+                                <input type="radio" name="question7" value="1000"> Commercial
+                            </label>
+                            <br>
+                            <label class="radio">
+                                <input type="radio" name="question7" value="10"> Hackeur
+                            </label>
+                            <br>
+                            <label class="radio">
+                                <input type="radio" name="question7" value="1"> Artiste
+                            </label>
+                        </div>
+                    </div>
+
+                    <button type="submit" class="button is-primary">What I want ?</button>
+                </form>
+
+                <div class="notification is-info">
+                    Score total : <span class="score" id="total-score">0</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <script>
+
+
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const form = document.getElementById('questionnaire');
+            const totalScoreElement = document.getElementById('total-score');
+
+            function calculateTotalScore() {
+                let totalScore = 0;
+                const inputs = form.querySelectorAll('input[type="radio"]:checked');
+                inputs.forEach(input => {
+                    totalScore += parseInt(input.value, 10);
+                });
+                totalScoreElement.textContent = totalScore;
+            }
+
+            form.addEventListener('change', calculateTotalScore);
+
+            form.addEventListener('submit', (event) => {
+                event.preventDefault(); // Empêche l'envoi par défaut du formulaire
+                const totalScore = parseInt(totalScoreElement.textContent, 10);
+
+                function verifyScore(intI) {
+            if ( parseInt(totalScore.toString()[intI]) >= parseInt(totalScore.toString()[1]) && parseInt(totalScore.toString()[intI]) >= parseInt(totalScore.toString()[2]) && parseInt(totalScore.toString()[intI]) >= parseInt(totalScore.toString()[3]) && parseInt(totalScore.toString()[intI]) >= parseInt(totalScore.toString()[0])){
+                return true;
+            }
+            return false;
+        }
+
+                if (verifyScore(0)) 
+                {
+                    window.location.href = 'discords.html';
+                } 
+                else if (verifyScore(1)) 
+                {
+                    window.location.href = 'dlauncher.html';
+                }
+                else if (verifyScore(2)) 
+                {
+                    window.location.href = 'mods.html';
+                } 
+                else 
+                {
+                    window.location.href = 'backups.html';
+                }
+            });
+        });
+    </script>
+</body>
+</html>

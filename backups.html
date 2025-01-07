@@ -1,0 +1,139 @@
+<!doctype html>
+<html class="no-js" lang="">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title></title>
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/app.css">
+
+  <meta name="description" content="">
+
+  <meta property="og:title" content="">
+  <meta property="og:type" content="">
+  <meta property="og:url" content="">
+  <meta property="og:image" content="">
+  <meta property="og:image:alt" content="">
+
+  <link rel="icon" href="/favicon.ico" sizes="any">
+  <link rel="icon" href="/icon.svg" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="icon.png">
+
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/1.0.0/css/bulma.min.css" integrity="sha512-+oEiKVGJRHutsibRYkkTIfjI0kspDtgJtkIlyPCNTCFCdhy+nSe25nvrCw7UpHPwNbdmNw9AkgGA+ptQxcjPug==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/1.0.0/css/bulma.css" integrity="sha512-2UlItOJI2xOc8T1IjOJNrutOsPuVPR+x4lILJ+X9ouT0FYu7oY+f7y0NGWO1LRwmu02ZwZksvq83tIk8baHu3g==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+  <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.8.1/slick.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.8.1/slick-theme.min.css">
+
+  <link rel="manifest" href="site.webmanifest">
+  <meta name="theme-color" content="#fafafa">
+</head>
+
+<body>
+<iframe src="header.html" style="width: 100%; height: 50px" class="header-iframe"></iframe>
+
+
+
+<section class="hero is-medium is-link ">
+  <div class="hero-body">
+    <span class="not-on-desktop"><center><p class="title" >Custom Legacy (backup)</p> <br>
+In the Minecraft PS3 community, "backup" refers to mods that add extra content like textures, skins, and mini-games. These mods, shared online, require a jailbroken console or a special setup to install. They enhance the game beyond its standard version.        </center></span>
+    <div class="fixed-grid has-3-cols not-on-mobile">
+      <div class="grid txt-desc-discord" >
+        <div class="cell is-col-span-2" style="padding-right: 10%">
+        <span><center><p class="title" >Custom Legacy (backup)</p> <br>
+In the Minecraft PS3 community, "backup" refers to mods that add extra content like textures, skins, and mini-games. These mods, shared online, require a jailbroken console or a special setup to install. They enhance the game beyond its standard version.        </center></span>
+        </div>
+        <div class="cell not-on-mobile">
+          <center>
+            <img  src="img/legacy-logo-removebg.png">
+          </center>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<section class="hero is-medium is-info">
+  <div class="hero-body">
+    <p class="title">CUSTOM LEGACY (BACKUP)</p>
+    <center>
+      <div class="grid is-col-min-12" id="clegacy-galeries">
+
+      </div>
+    </center>
+  </div>
+</section>
+
+
+<script>
+  // Votre JSON Discord
+  var dataClegacy = {
+      "clegacy": [
+        {
+          "download": "https://www.youtube.com/watch?v=DKng9t1fcd4&list=PLKmHbkNMSvCL2JmZBgnzdhdfKr5iGsNIn",
+          "video": "DKng9t1fcd4",
+          "name": "15*21"
+        },
+        {
+          "download": "https://www.youtube.com/watch?v=Ce5eSaMQW1I",
+          "video": "Ce5eSaMQW1I",
+          "name": "KAGURA V3"
+        },
+        {
+          "download": "https://mega.nz/folder/hcV2UA4B#yLwTB52mnxE5FddoPLTMiQ",
+          "video": "-h4IJ5YBhdY",
+          "name": "Kagura V2"
+        },
+        {
+          "download": "https://mega.nz/folder/0c90kTJC#CsPEl9LR9h0gk-CO0ix8Sw",
+          "video": "oQyYbmNsjFk",
+          "name": "Kagura V1"
+        },
+        {
+          "download": "https://www.youtube.com/watch?v=euCCjrqWuxw",
+          "video": "euCCjrqWuxw",
+          "name": "TMC gang v2"
+        },
+                {
+          "download": "https://www.youtube.com/watch?v=CGOKCj6WjlU",
+          "video": "CGOKCj6WjlU",
+          "name": "Tricky Trials"
+        }
+        ,
+                {
+          "download": "https://www.mediafire.com/folder/90dtpi6g0rznt/Kagura_V4_PKG",
+          "video": "y-SHFm0brqM",
+          "name": "Kagura V4"
+        }
+        ,
+                {
+          "download": "https://www.mediafire.com/file/hfwx2j0ebt4nhtl/Minecraft_Compressed_NPUB_.pkg/file",
+          "video": "EMGhkFv755E",
+          "name": "Minecraft Compressed"
+        }
+      ]
+    }
+  ;
+</script>
+
+
+<script>
+  //SPRX INIT
+  var galeriesDiv = document.getElementById("clegacy-galeries");
+
+  // Parcourir le tableau JSON et créer les divs correspondantes
+  dataClegacy.clegacy.forEach(function(itemClegacy) {
+    var div = document.createElement("div");
+    div.className = "cell cell-mods";
+    div.innerHTML = '          <span class="name-discord">' + itemClegacy.name + '</span>\n' +
+      '          <img class="img-mods" src="https://img.youtube.com/vi/' + itemClegacy.video + '/maxresdefault.jpg" alt="YouTube Video Preview">\n' +
+      '          <a class="button is-primary is-rounded button-clegacy" href="' + itemClegacy.download + '" download="download.zip">Download</a>' + '<a class="button is-danger is-rounded button-clegacy" onclick="window.open(\'https://www.youtube.com/watch?v=' + itemClegacy.video + '\', \'_blank\')" download="download.zip">Showcase</a>';
+    galeriesDiv.appendChild(div);
+  });
+</script>
+
