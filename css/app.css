@@ -1,0 +1,90 @@
+
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@500&display=swap');
+
+.video-container {
+  position: relative;
+  width: 100%;
+  overflow: hidden;
+}
+
+.center-text {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  margin-left: 100px;
+}
+*{
+  font-family: 'Poppins', sans-serif;
+  font-weight: 500;
+}
+
+.img-discord{
+  border-radius: 40%;
+  background-color: rgba(0, 76, 252, 0.22);
+}
+
+
+.img-backup{
+  width: 45%;
+  padding-right: 2%;
+}
+
+.name-discord{
+  font-size: large;
+  font-weight: bolder;
+  margin: auto;
+  color: rgba(34, 34, 34, 0.84);
+
+}
+
+.txt-desc-discord{
+  margin: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: xx-large;
+}
+
+.cell-mods{
+  background-color: white;
+  border-radius: 5%;
+  padding: 4% 4% 4% 4%;
+}
+.cell-mods-rtm{
+  background-color: #66d1ff;
+  border-radius: 5%;
+  padding: 4% 4% 4% 4%;
+}
+
+.cell-discord-style {
+  transition: all 0.2s ease-in-out;
+}
+.cell-discord-style:hover {
+  transform: scale(1.1);
+}
+
+.img-mods
+{
+  padding: 4% 4% 4% 4%;
+  border-radius: 2rem;
+}
+
+.button-clegacy{
+  margin: 1% 1% 1% 1%;
+}
+
+/* Pour les écrans plus petits que 1024px */
+@media screen and (max-width: 1024px) {
+  .not-on-mobile {
+    display: none !important;
+    visibility: hidden;
+  }
+}
+@media screen and (min-width: 1024px) {
+  .not-on-desktop {
+    display: none !important;
+    visibility: hidden;
+  }
+}
+
