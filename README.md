@@ -1,6 +1,3 @@
-Bien sûr ! Voici la traduction en anglais : bahaha une note de chat gpt 
-
----
 
 # Minecraft PS3 Legacy Hub
 
