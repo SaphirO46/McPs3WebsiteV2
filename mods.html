@@ -83,34 +83,7 @@ Modding in Minecraft unlocks a world of endless creativity and innovation, allow
 </section>
 
 
-  <script>
-    // Votre JSON Discord
-    var dataSprx = {
-        "sprx": [
-          {
-            "download": "./download/KaguraClientV1.zip",
-            "video": "kJyOtf0Q3dM",
-            "name": "Kagura Sprx V1"
-          },
-          {
-            "download": "https://download2392.mediafire.com/5rodljs6a0igmEpIfHsKhAT0vOhjIi8Q9TYwv_twbbu57_ybDMUmBhwBu1F2TayjzGL6TEErMRn6oT8Hi4J-XdbFbhCqbY4AbGje5xi-lIgWhyKyTGVnKNJrM8RCNv5VW669MNKI9gm26qBlquJlm3dMZYBRDHscE5HoQjtZFVc1/zfdmi3goo8j35gu/%5BDownCraft%5D+V4.5+Premium%28CREATED+BY+MisakiDev%29.rar",
-            "video": "Yal7zzdhfxo",
-            "name": "Downcraft V4.5"
-          },
-          {
-            "download": "https://download1526.mediafire.com/3dck1vvvgwkgnkZwtwZ45T5PAQyMleoTM7T1x5vEe1KPwDzQYSH6qiGOo0UCmaoIF9X8AybOIHQS6qj7a21knB6Z15_RumbYnjNAuMs3XNQg1v3shZ8QP9NH9YCVOo5fROmMcvjqIA0Q-aR3rstQaklOWcJGHn3ShKWq5DSO9tpo/4f28o3orxinshhy/UltimateCraftV2+%5BBLES-BLUS.rar",
-            "video": "mc7dNJh72Tc",
-            "name": "UltimateCraft V2"
-          },
-          {
-            "download": "https://download1585.mediafire.com/v9vykje5i6lgVxt3PwvTyUVgR-cSWOC1kClOAdAj96dKC3HKrlyy6cMRM8G2x5iIC1A8Gja2g8tUodV6gaEOh8PZhpIDRBylgSYdnAag8VdwYXRlHV3OZL24gq0gKC5InLHEhz3Q9MMwdD6ufLO0yG5SG__zCKXWCxkGesf-fs4d/j4uia2x02s5x3b0/DOWNCRAFT+V2.1+SPRX+MOD+MENU+%28CREATED+BY+MisakiDev%29.rar",
-            "video": "HEUuLiWTgdM",
-            "name": "Downcraft V2.1"
-          }
-        ]
-      }
-    ;
-  </script>
+
 
   <script>
     // Votre JSON Discord
@@ -137,33 +110,45 @@ Modding in Minecraft unlocks a world of endless creativity and innovation, allow
   </script>
 
 
-  <script>
-    //SPRX INIT
-    var galeriesDiv = document.getElementById("sprx-galeries");
 
-    // Parcourir le tableau JSON et créer les divs correspondantes
-    dataSprx.sprx.forEach(function(itemSprx) {
-      var div = document.createElement("div");
-      div.className = "cell cell-mods";
-      div.innerHTML = '          <span class="name-discord">' + itemSprx.name + '</span>\n' +
-        '          <img class="img-mods" src="https://img.youtube.com/vi/' + itemSprx.video + '/maxresdefault.jpg" alt="YouTube Video Preview">\n' +
-        '          <a class="button is-primary is-rounded is-medium" href="' + itemSprx.download + '" download="download.zip">Download</a>';
-      galeriesDiv.appendChild(div);
-    });
-  </script>
 
 <script>
-  //SPRX INIT
-  var galeriesDiv = document.getElementById("rtm-galeries");
+  // Charger et afficher les données SPRX
+  fetch('json/sprx.json')
+    .then(response => response.json())
+    .then(dataSprx => {
+      var galeriesDiv = document.getElementById("sprx-galeries");
 
-  // Parcourir le tableau JSON et créer les divs correspondantes
-  dataRtm.rtm.forEach(function(itemRtm) {
-    var div = document.createElement("div");
-    div.className = "cell cell-mods-rtm";
-    div.innerHTML = '          <span class="name-discord">' + itemRtm.name + '</span>\n' +
-      '          <img class="img-mods" src="https://img.youtube.com/vi/' + itemRtm.video + '/maxresdefault.jpg" alt="YouTube Video Preview">\n' +
-      '          <a class="button is-primary is-rounded is-medium" href="' + itemRtm.download + '" download="download.zip">Download</a>';
-    galeriesDiv.appendChild(div);
-  });
+      dataSprx.sprx.forEach(function(itemSprx) {
+        var div = document.createElement("div");
+        div.className = "cell cell-mods";
+        div.innerHTML = `
+          <span class="name-discord">${itemSprx.name}</span>
+          <img class="img-mods" src="https://img.youtube.com/vi/${itemSprx.video}/maxresdefault.jpg" alt="YouTube Video Preview">
+          <a class="button is-primary is-rounded is-medium" href="${itemSprx.download}" download="download.zip">Download</a>
+        `;
+        galeriesDiv.appendChild(div);
+      });
+    })
+    .catch(error => console.error('Erreur lors du chargement des données SPRX:', error));
+
+  // Charger et afficher les données RTM
+  fetch('json/rtm.json')
+    .then(response => response.json())
+    .then(dataRtm => {
+      var galeriesDiv = document.getElementById("rtm-galeries");
+
+      dataRtm.rtm.forEach(function(itemRtm) {
+        var div = document.createElement("div");
+        div.className = "cell cell-mods-rtm";
+        div.innerHTML = `
+          <span class="name-discord">${itemRtm.name}</span>
+          <img class="img-mods" src="https://img.youtube.com/vi/${itemRtm.video}/maxresdefault.jpg" alt="YouTube Video Preview">
+          <a class="button is-primary is-rounded is-medium" href="${itemRtm.download}" download="download.zip">Download</a>
+        `;
+        galeriesDiv.appendChild(div);
+      });
+    })
+    .catch(error => console.error('Erreur lors du chargement des données RTM:', error));
 </script>
 

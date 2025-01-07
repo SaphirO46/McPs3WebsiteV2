@@ -69,71 +69,25 @@ In the Minecraft PS3 community, "backup" refers to mods that add extra content l
   </div>
 </section>
 
-
 <script>
-  // Votre JSON Discord
-  var dataClegacy = {
-      "clegacy": [
-        {
-          "download": "https://www.youtube.com/watch?v=DKng9t1fcd4&list=PLKmHbkNMSvCL2JmZBgnzdhdfKr5iGsNIn",
-          "video": "DKng9t1fcd4",
-          "name": "15*21"
-        },
-        {
-          "download": "https://www.youtube.com/watch?v=Ce5eSaMQW1I",
-          "video": "Ce5eSaMQW1I",
-          "name": "KAGURA V3"
-        },
-        {
-          "download": "https://mega.nz/folder/hcV2UA4B#yLwTB52mnxE5FddoPLTMiQ",
-          "video": "-h4IJ5YBhdY",
-          "name": "Kagura V2"
-        },
-        {
-          "download": "https://mega.nz/folder/0c90kTJC#CsPEl9LR9h0gk-CO0ix8Sw",
-          "video": "oQyYbmNsjFk",
-          "name": "Kagura V1"
-        },
-        {
-          "download": "https://www.youtube.com/watch?v=euCCjrqWuxw",
-          "video": "euCCjrqWuxw",
-          "name": "TMC gang v2"
-        },
-                {
-          "download": "https://www.youtube.com/watch?v=CGOKCj6WjlU",
-          "video": "CGOKCj6WjlU",
-          "name": "Tricky Trials"
-        }
-        ,
-                {
-          "download": "https://www.mediafire.com/folder/90dtpi6g0rznt/Kagura_V4_PKG",
-          "video": "y-SHFm0brqM",
-          "name": "Kagura V4"
-        }
-        ,
-                {
-          "download": "https://www.mediafire.com/file/hfwx2j0ebt4nhtl/Minecraft_Compressed_NPUB_.pkg/file",
-          "video": "EMGhkFv755E",
-          "name": "Minecraft Compressed"
-        }
-      ]
-    }
-  ;
-</script>
+  // Charger et afficher les données Clegacy
+  fetch('json/clegacy.json')
+    .then(response => response.json())
+    .then(dataClegacy => {
+      var galeriesDiv = document.getElementById("clegacy-galeries");
 
-
-<script>
-  //SPRX INIT
-  var galeriesDiv = document.getElementById("clegacy-galeries");
-
-  // Parcourir le tableau JSON et créer les divs correspondantes
-  dataClegacy.clegacy.forEach(function(itemClegacy) {
-    var div = document.createElement("div");
-    div.className = "cell cell-mods";
-    div.innerHTML = '          <span class="name-discord">' + itemClegacy.name + '</span>\n' +
-      '          <img class="img-mods" src="https://img.youtube.com/vi/' + itemClegacy.video + '/maxresdefault.jpg" alt="YouTube Video Preview">\n' +
-      '          <a class="button is-primary is-rounded button-clegacy" href="' + itemClegacy.download + '" download="download.zip">Download</a>' + '<a class="button is-danger is-rounded button-clegacy" onclick="window.open(\'https://www.youtube.com/watch?v=' + itemClegacy.video + '\', \'_blank\')" download="download.zip">Showcase</a>';
-    galeriesDiv.appendChild(div);
-  });
+      dataClegacy.clegacy.forEach(function(itemClegacy) {
+        var div = document.createElement("div");
+        div.className = "cell cell-mods";
+        div.innerHTML = `
+          <span class="name-discord">${itemClegacy.name}</span>
+          <img class="img-mods" src="https://img.youtube.com/vi/${itemClegacy.video}/maxresdefault.jpg" alt="YouTube Video Preview">
+          <a class="button is-primary is-rounded button-clegacy" href="${itemClegacy.download}" download="download.zip">Download</a>
+          <a class="button is-danger is-rounded button-clegacy" onclick="window.open('https://www.youtube.com/watch?v=${itemClegacy.video}', '_blank')">Showcase</a>
+        `;
+        galeriesDiv.appendChild(div);
+      });
+    })
+    .catch(error => console.error('Erreur lors du chargement des données Clegacy:', error));
 </script>
 
