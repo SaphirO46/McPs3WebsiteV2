@@ -1,6 +1,4 @@
-Bien sûr ! Voici la traduction en anglais :
 
----
 
 # Minecraft PS3 Legacy Hub
 
