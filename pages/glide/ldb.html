@@ -1,0 +1,443 @@
+<!doctype html>
+<html class="no-js" lang="">
+
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title></title>
+	<link rel="stylesheet" href="/css/style.css">
+	<link rel="stylesheet" href="/css/app.css">
+
+	<meta name="description" content="">
+
+	<meta property="og:title" content="">
+	<meta property="og:type" content="">
+	<meta property="og:url" content="">
+	<meta property="og:image" content="">
+	<meta property="og:image:alt" content="">
+
+	<link rel="icon" href="/favicon.ico" sizes="any">
+	<link rel="icon" href="/icon.svg" type="image/svg+xml">
+	<link rel="apple-touch-icon" href="/icon.png">
+
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.3/css/bulma.min.css">
+	<link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+	<script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.8.1/slick.min.css">
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.8.1/slick-theme.min.css">
+
+	<link rel="manifest" href="/site.webmanifest">
+	<meta name="theme-color" content="#fafafa">
+</head>
+
+<body>
+	<style>
+		.tab-ldb-glide {
+			max-width: 90%;
+			/* Limite la largeur maximale */
+			margin: auto;
+			/* Centre le tableau */
+			font-size: 0.85rem;
+			/* Réduit la taille du texte */
+		}
+	</style>
+
+
+	<iframe src="/header.html" style="width: 100%; height: 50px" class="header-iframe"></iframe>
+
+
+	<div class="table-container">
+		<table class="table is-striped is-hoverable is-fullwidth tab-ldb-glide" id="data-table">
+			<thead>
+				<tr>
+					<th>Rank</th>
+					<th>Player</th>
+					<th>Cavern</th>
+					<th>Temple</th>
+					<th>Canyon</th>
+					<th>Kraken</th>
+					<th>Yeti</th>
+					<th>Dragon</th>
+					<th>Shrunk</th>
+					<th>Mobs</th>
+					<th>Body</th>
+					<th>Excalibur</th>
+					<th>Icarus</th>
+					<th>Celts</th>
+					<th>Average</th>
+					<th>TT-Time</th>
+					<th>Plateform</th>
+					<th>Division</th>
+				</tr>
+			</thead>
+			<tbody>
+				<!-- Les lignes de données seront insérées ici -->
+			</tbody>
+		</table>
+	</div>
+
+
+
+
+	<script>
+		//convert json 
+		function csvToJson (csv)
+		{
+			const lines = csv.trim().split("\n");
+			const headers = lines[0].split(",");
+
+			return lines.slice(1).map(line =>
+			{
+				const values = line.split(",");
+				return headers.reduce((obj, header, index) =>
+				{
+					obj[header.trim()] = values[index]?.trim();
+					return obj;
+				}, {});
+			});
+		}
+
+		//----------------------------------------------------------------
+		//Add data to json
+
+		function addAverageTimes (data, keys)
+		{
+			return data.map(player =>
+			{
+				// Filtre les clés correspondantes aux temps et les convertit en secondes
+				const times = keys.map(key => timeToSeconds(player[key]));
+				const average = times.reduce((sum, time) => sum + time, 0) / times.length; // Moyenne des temps
+				player.average = secondsToTime(average); // Ajoute la moyenne en format MM:SS.mmm
+				return player;
+			});
+		}
+
+		function addRankByJson (data)
+		{
+			return data.map((player, index) =>
+			{
+				player.rank = index + 1;
+				return player;
+			});
+		}
+		function addTtTimeByJson (data)
+		{
+			// Les noms des clés représentant les cartes
+			const mapKeys = [
+				"Cavern", "Kraken", "Yeti", "Dragon", "Temple", "Shrunk",
+				"Mobs", "Body", "Canyon", "Excalibur", "Icarus", "Celts"
+			];
+
+			data.forEach(player =>
+			{
+				// Additionner les temps des cartes pour chaque joueur en secondes
+				let totalTimeInSeconds = 0;
+				mapKeys.forEach(map =>
+				{
+					totalTimeInSeconds += timeToSeconds(player[map]);
+				});
+
+				// Convertir le total en format MM:SS.mmm et ajouter au joueur
+				player.ttTime = secondsToTime(totalTimeInSeconds);
+			});
+
+			return data;
+		}
+
+		//----------------------------------------------------------------
+		//table personalisation
+
+
+		function ColoredCaseByTime (key, valueCell, td, mapSelected, json)
+		{
+			let finalColor = [0, 0, 0];
+			const glideRankyRanky = json;
+
+
+			if (key == mapSelected)
+			{
+				const mapChoosedData = glideRankyRanky.find(mapData => mapData.Map === key);
+				// Seuil spécifique pour la colonne
+				const timeRankE = timeToSeconds(mapChoosedData.Times.Elite);
+				const timeRankL = timeToSeconds(mapChoosedData.Times.Legend);
+				const timeRankM = timeToSeconds(mapChoosedData.Times.Master);
+				const timeRankX = timeToSeconds(mapChoosedData.Times.Expert);
+				const timeRankP = timeToSeconds(mapChoosedData.Times.Pro);
+				const timeRankS = timeToSeconds(mapChoosedData.Times.Skilled);
+				const timeRankI = timeToSeconds(mapChoosedData.Times.Intermediate);
+				const timeRankB = timeToSeconds(mapChoosedData.Times.Beginner);
+				const cellTime = timeToSeconds(valueCell); // Convertit le temps de la cellule en secondes
+
+
+				// Si le temps est supérieur au seuil, colorier la cellule en bleu
+				if (cellTime > timeRankB)
+				{
+					finalColor = [220, 220, 220];
+				}
+				else if (cellTime > timeRankI)
+				{
+					finalColor = [252, 149, 149];
+				}
+				else if (cellTime > timeRankS)
+				{
+					finalColor = [244, 176, 176];
+				}
+				else if (cellTime > timeRankP)
+				{
+					finalColor = [247, 163, 193];
+				}
+				else if (cellTime > timeRankX)
+				{
+					finalColor = [229, 167, 242];
+				}
+				else if (cellTime > timeRankM)
+				{
+					finalColor = [184, 141, 249];
+				}
+				else if (cellTime > timeRankL)
+				{
+					finalColor = [176, 164, 249];
+				}
+				else if (cellTime < timeRankE)
+				{
+					finalColor = [142, 158, 247];
+				}
+				else if (cellTime >= timeRankE)
+				{
+					finalColor = [158, 203, 250];
+				}
+				else
+				{
+					finalColor = [0, 0, 0];
+				}
+
+				td.style.backgroundColor = "rgb(" + finalColor[0] + "," + finalColor[1] + "," + finalColor[2] + ")";
+
+
+
+
+			}
+
+		}
+
+
+		//	--+++++--- Division adding to table-+++++++-----
+		function AddingDivisionToTable (key, valueCell, td, mapSelected, json, rank)
+		{
+			let finalColor = [0, 0, 0];
+			let finalDivision = "/img/glide/beginner.webp";
+			const glideRankyRanky = json;
+			if (key == "division" || key == "Division")
+			{
+				const mapChoosedData = glideRankyRanky.find(mapData => mapData.Map === "average");
+				// Seuil spécifique pour la colonne
+				const timeRankE = timeToSeconds(mapChoosedData.Times.Elite);
+				const timeRankL = timeToSeconds(mapChoosedData.Times.Legend);
+				const timeRankM = timeToSeconds(mapChoosedData.Times.Master);
+				const timeRankX = timeToSeconds(mapChoosedData.Times.Expert);
+				const timeRankP = timeToSeconds(mapChoosedData.Times.Pro);
+				const timeRankS = timeToSeconds(mapChoosedData.Times.Skilled);
+				const timeRankI = timeToSeconds(mapChoosedData.Times.Intermediate);
+				const timeRankB = timeToSeconds(mapChoosedData.Times.Beginner);
+				const cellTime = timeToSeconds(valueCell); // Convertit le temps de la cellule en secondes
+
+
+				// Si le temps est supérieur au seuil, colorier la cellule en bleu
+				if (cellTime > timeRankB)
+				{
+					finalDivision = "/img/glide/beginner.webp";
+					finalColor = [220, 220, 220];
+				}
+				else if (cellTime > timeRankI)
+				{
+					finalDivision = "/img/glide/beginner.webp";
+					finalColor = [252, 149, 149];
+				}
+				else if (cellTime > timeRankS)
+				{
+					finalDivision = "/img/glide/intermediate.webp";
+					finalColor = [244, 176, 176];
+
+				}
+				else if (cellTime > timeRankP)
+				{
+					finalDivision = "/img/glide/skilled.webp";
+					finalColor = [247, 163, 193];
+
+				}
+				else if (cellTime > timeRankX)
+				{
+					finalDivision = "/img/glide/pro.webp";
+					finalColor = [229, 167, 242];
+
+				}
+				else if (cellTime > timeRankM)
+				{
+					finalDivision = "/img/glide/expert.webp";
+					finalColor = [184, 141, 249];
+
+				}
+				else if (cellTime > timeRankL)
+				{
+					finalDivision = "/img/glide/master.webp";
+					finalColor = [176, 164, 249];
+
+				}
+				else if (cellTime < timeRankE)
+				{
+					finalDivision = "/img/glide/elite.webp";
+					finalColor = [142, 158, 247];
+
+				}
+				else if (cellTime >= timeRankE)
+				{
+					finalDivision = "/img/glide/legend.webp";
+					finalColor = [158, 203, 250];
+
+				}
+				else
+				{
+					finalDivision = "/img/glide/beginner.webp";
+				}
+				if (rank == "1")
+				{
+					finalDivision = "/img/glide/champion.webp";
+					finalColor = [200, 247, 246];
+				}
+
+				td.style.backgroundColor = "rgb(" + finalColor[0] + "," + finalColor[1] + "," + finalColor[2] + ")";
+				td.innerHTML = '<center><img style="max-width:2.3em" src="' + finalDivision + '"></center>'
+			}
+
+
+		}
+
+		function AddingPlateformLogoToTable (key, valueCell, td, mapSelected)
+		{
+			let finalColor = [0, 0, 0];
+			let finalPlateform = "/img/glide/switch.webp";
+
+			if (key == "Platform")
+			{
+				if (valueCell == "wiiuc")
+				{
+					finalPlateform = "/img/glide/wiiuc.webp"
+				}
+				else if (valueCell == "wiiu")
+				{
+					finalPlateform = "/img/glide/wiiu.webp"
+				}
+				else if (valueCell == "ps")
+				{
+					finalPlateform = "/img/glide/ps.webp"
+				}
+				else if (valueCell == "xbox")
+				{
+					finalPlateform = "/img/glide/xbox.webp"
+				}
+				else if (valueCell == "switch")
+				{
+					finalPlateform = "/img/glide/switch.webp"
+				}
+				else { finalPlateform = "/img/glide/switch.webp" }
+				td.innerHTML = '<center><img style="max-width:2.3em" src="' + finalPlateform + '"></center>'
+			}
+		}
+
+		//----------------------------------------------------------------
+		//times configurator
+		function timeToSeconds (time)
+		{
+			const parts = time.split(":"); // Sépare les minutes et les secondes
+			const minutes = parseInt(parts[0], 10); // Convertit les minutes en nombre
+			const seconds = parseFloat(parts[1]); // Convertit les secondes en nombre (décimal)
+			return minutes * 60 + seconds; // Convertit tout en secondes
+		}
+
+		function sortByTime (array, key)
+		{
+			return array.sort((a, b) =>
+			{
+				const timeA = timeToSeconds(a[key]);
+				const timeB = timeToSeconds(b[key]);
+				return timeA - timeB; // Tri croissant
+			});
+		}
+
+		function secondsToTime (seconds)
+		{
+			const minutes = Math.floor(seconds / 60);
+			const remainingSeconds = (seconds % 60).toFixed(3); // Garde les millisecondes à 3 décimales
+			return `${minutes}:${remainingSeconds.padStart(6, '0')}`; // Formate en MM:SS.mmm
+		}
+
+
+		//----------------------------------------------------------------
+		//Preparation du Json final. 
+
+		fetch('/csv/glideLDB.csv') // Remplacez par le chemin correct vers votre fichier CSV
+			.then(response =>
+			{
+				if (!response.ok) throw new Error("Erreur de chargement du fichier CSV");
+				return response.text();
+			})
+			.then(csvText =>
+			{
+				fetch('/csv/glideRank.json') // prend le json sa mere
+					.then(response =>
+					{
+						if (!response.ok) throw new Error("Erreur de chargement du fichier json");
+						return response.json();
+					})
+					.then(glideRankyRanky =>
+					{
+						console.log(glideRankyRanky)
+
+						const timeKeys = ["Cavern", "Temple", "Dragon", "Body", "Canyon", "Celts", "Excalibur", "Icarus", "Kraken", "Mobs", "Shrunk", "Yeti"];
+						const jsonData = csvToJson(csvText);
+						let jsonDataWithAverages = addAverageTimes(jsonData, timeKeys);
+						jsonDataWithAverages = addTtTimeByJson(jsonDataWithAverages);
+						const sortedData = sortByTime(jsonDataWithAverages, "average");
+						const rankedData = addRankByJson(sortedData);
+						console.log(rankedData);
+						console.log(jsonData); // Affiche le JSON dans la console
+
+
+
+						//creeation du tableau
+						// Insérer les données dans le tableau
+						const tbody = document.querySelector("#data-table tbody");
+
+						sortedData.forEach(row =>
+						{
+							const tr = document.createElement("tr");
+							for (const key of ["rank", "Player", "Cavern", "Temple", "Canyon", "Kraken", "Yeti", "Dragon", "Shrunk", "Mobs", "Body", "Excalibur", "Icarus", "Celts", "average", "ttTime", "Platform", "Division"])
+							{
+								const td = document.createElement("td");
+								td.textContent = row[key] || ""; // Si la valeur est vide, insérer une chaîne vide
+
+
+								glideRankyRanky.forEach((map) =>
+								{
+									//adding data to table like plateform img, division, colors
+									ColoredCaseByTime(key, row[key], td, map.Map, glideRankyRanky);
+									AddingDivisionToTable(key, row["average"], td, map.Map, glideRankyRanky, row["rank"]);
+									AddingPlateformLogoToTable(key, row["Platform"], td, map.Map);
+								})
+
+								tr.appendChild(td);
+							}
+							tbody.appendChild(tr);
+						});
+
+					})
+					.catch(error => console.error("Erreur :", error));
+
+
+			})
+			.catch(error => console.error("Erreur :", error));
+
+	</script>
+
+</body>

@@ -63,135 +63,154 @@
     }
 </style>
 
-  <section class="section">
-    <div class="container">
-        <h1 class="title">Résultats des Joueurs</h1>
+<section class="section">
+  <div class="container">
+      <h1 class="title">Résultats des Joueurs</h1>
 
-        <!-- Section de filtres -->
-        <div class="filter-section">
-            <!-- Champ de recherche -->
-            <input class="input search-bar" type="text" id="playerSearch" placeholder="Rechercher un joueur...">
-            
-            <!-- Checkboxes -->
-            <div id="checkboxFilters"></div>
-        </div>
+      <!-- Section de filtres -->
+      <div class="filter-section">
+          <!-- Champ de recherche -->
+          <input class="input search-bar" type="text" id="playerSearch" placeholder="Rechercher un joueur...">
+          
+          <!-- Checkboxes -->
+          <div id="checkboxFilters"></div>
+      </div>
 
-        <!-- Tableau -->
-        <div class="table-container">
-            <table class="table is-bordered is-striped is-hoverable is-fullwidth" id="data-table">
-                <thead>
-                    <!-- Les en-têtes seront insérés dynamiquement -->
-                </thead>
-                <tbody>
-                    <!-- Les lignes de données seront insérées ici -->
-                </tbody>
-            </table>
-        </div>
-    </div>
+      <!-- Tableau -->
+      <div class="table-container">
+          <table class="table is-bordered is-striped is-hoverable is-fullwidth " id="data-table">
+              <thead>
+                  <!-- Les en-têtes seront insérés dynamiquement -->
+              </thead>
+              <tbody>
+                  <!-- Les lignes de données seront insérées ici -->
+              </tbody>
+          </table>
+      </div>
+  </div>
 </section>
 
 <script>
-    // Fonction pour convertir CSV en JSON
-    function csvToJson(csv) {
-        const lines = csv.trim().split("\n");
-        const headers = lines[0].split(",");
-        return {
-            headers: headers.map(header => header.trim()),
-            rows: lines.slice(1).map(line => {
-                const values = line.split(",");
-                return headers.reduce((obj, header, index) => {
-                    obj[header.trim()] = values[index].trim();
-                    return obj;
-                }, {});
-            })
-        };
-    }
+  // Fonction pour convertir CSV en JSON
+  function csvToJson(csv) {
+      const lines = csv.trim().split("\n");
+      const headers = lines[0].split(",");
+      return {
+          headers: headers.map(header => header.trim()),
+          rows: lines.slice(1).map(line => {
+              const values = line.split(",");
+              return headers.reduce((obj, header, index) => {
+                  obj[header.trim()] = values[index].trim();
+                  return obj;
+              }, {});
+          })
+      };
+  }
 
-    // Charger le CSV
-    fetch("/csv/glideLDB.csv")
-        .then(response => response.text())
-        .then(csvText => {
-            const { headers, rows } = csvToJson(csvText);
-            const tableHead = document.querySelector("#data-table thead");
-            const tableBody = document.querySelector("#data-table tbody");
-            const checkboxFilters = document.getElementById("checkboxFilters");
-            const playerSearch = document.getElementById("playerSearch");
+  // Fonction pour calculer la moyenne des temps d'un joueur
+  function calculateAverage(row, timeHeaders) {
+      const times = timeHeaders.map(header => parseFloat(row[header]) || 0); // Convertir en nombres
+      const validTimes = times.filter(time => time > 0); // Exclure les valeurs invalides
+      return validTimes.length ? (validTimes.reduce((a, b) => a + b, 0) / validTimes.length).toFixed(3) : "N/A";
+  }
 
-            // Ajouter les en-têtes au tableau
-            const headerRow = document.createElement("tr");
-            headers.forEach(header => {
-                const th = document.createElement("th");
-                th.textContent = header;
-                th.dataset.header = header; // Ajout pour identifier les colonnes
-                headerRow.appendChild(th);
-            });
-            tableHead.appendChild(headerRow);
+  // Charger le CSV
+  fetch("/csv/glideLDB.csv")
+      .then(response => response.text())
+      .then(csvText => {
+          const { headers, rows } = csvToJson(csvText);
+          const tableHead = document.querySelector("#data-table thead");
+          const tableBody = document.querySelector("#data-table tbody");
+          const checkboxFilters = document.getElementById("checkboxFilters");
+          const playerSearch = document.getElementById("playerSearch");
 
-            // Ajouter les lignes de données au tableau
-            function renderTable(data) {
-                tableBody.innerHTML = ""; // Réinitialiser le tableau
-                data.forEach(row => {
-                    const tr = document.createElement("tr");
-                    headers.forEach(header => {
-                        const td = document.createElement("td");
-                        td.textContent = row[header];
-                        td.dataset.header = header; // Ajout pour les filtres
-                        tr.appendChild(td);
-                    });
-                    tableBody.appendChild(tr);
-                });
-            }
+          // Ajouter la colonne "Time Average" aux en-têtes
+          headers.push("Time Average");
 
-            // Initialiser le tableau
-            renderTable(rows);
+          // Ajouter les en-têtes au tableau
+          const headerRow = document.createElement("tr");
+          headers.forEach(header => {
+              const th = document.createElement("th");
+              th.textContent = header;
+              th.dataset.header = header; // Ajout pour identifier les colonnes
+              headerRow.appendChild(th);
+          });
+          tableHead.appendChild(headerRow);
 
-            // Ajouter les checkboxes pour les colonnes
-            headers.slice().forEach(header => { // Sauf "Player" et "Platform"
-                const checkbox = document.createElement("label");
-                checkbox.className = "checkbox";
-                checkbox.innerHTML = `
-                    <input type="checkbox" checked data-column="${header}">
-                    ${header}
-                `;
-                checkboxFilters.appendChild(checkbox);
-            });
+          // Ajouter les lignes de données au tableau
+          function renderTable(data) {
+              tableBody.innerHTML = ""; // Réinitialiser le tableau
+              const timeHeaders = headers.slice(1, -2); // Exclure "Player", "Platform", et "Time Average"
 
-            // Filtrer les colonnes avec les checkboxes
-            checkboxFilters.addEventListener("change", () => {
-                const activeColumns = Array.from(
-                    checkboxFilters.querySelectorAll("input[type='checkbox']:checked")
-                ).map(checkbox => checkbox.dataset.column);
+              data.forEach(row => {
+                  const tr = document.createElement("tr");
+                  headers.forEach(header => {
+                      const td = document.createElement("td");
 
-                document.querySelectorAll("#data-table th, #data-table td").forEach(cell => {
-                    if (cell.dataset.header && !activeColumns.includes(cell.dataset.header)) {
-                        cell.style.display = "none"; // Masquer
-                    } else {
-                        cell.style.display = ""; // Afficher
-                    }
-                });
-            });
+                      if (header === "Time Average") {
+                          // Calculer et afficher la moyenne
+                          td.textContent = calculateAverage(row, timeHeaders);
+                      } else {
+                          td.textContent = row[header] || "";
+                      }
 
-            // Filtrer par joueur avec le champ de recherche
-            playerSearch.addEventListener("input", (event) => {
-                const query = event.target.value.toLowerCase();
-                const filteredRows = rows.filter(row =>
-                    row.Player.toLowerCase().includes(query)
-                );
-                renderTable(filteredRows);
-                const activeColumns = Array.from(
-                    checkboxFilters.querySelectorAll("input[type='checkbox']:checked")
-                ).map(checkbox => checkbox.dataset.column);
+                      td.dataset.header = header; // Ajout pour les filtres
+                      tr.appendChild(td);
+                  });
+                  tableBody.appendChild(tr);
+              });
+          }
 
-                document.querySelectorAll("#data-table th, #data-table td").forEach(cell => {
-                    if (cell.dataset.header && !activeColumns.includes(cell.dataset.header)) {
-                        cell.style.display = "none"; // Masquer
-                    } else {
-                        cell.style.display = ""; // Afficher
-                    }
-                });
-            });
-        })
-        .catch(error => console.error("Erreur lors du chargement du CSV :", error));
+          // Initialiser le tableau
+          renderTable(rows);
+
+          // Ajouter les checkboxes pour les colonnes
+          headers.slice(1, -2).forEach(header => { // Sauf "Player", "Platform", et "Time Average"
+              const checkbox = document.createElement("label");
+              checkbox.className = "checkbox";
+              checkbox.innerHTML = `
+                  <input type="checkbox" checked data-column="${header}">
+                  ${header}
+              `;
+              checkboxFilters.appendChild(checkbox);
+          });
+
+          // Filtrer les colonnes avec les checkboxes
+          checkboxFilters.addEventListener("change", () => {
+              const activeColumns = Array.from(
+                  checkboxFilters.querySelectorAll("input[type='checkbox']:checked")
+              ).map(checkbox => checkbox.dataset.column);
+
+              document.querySelectorAll("#data-table th, #data-table td").forEach(cell => {
+                  if (cell.dataset.header && !activeColumns.includes(cell.dataset.header)) {
+                      cell.style.display = "none"; // Masquer
+                  } else {
+                      cell.style.display = ""; // Afficher
+                  }
+              });
+          });
+
+          // Filtrer par joueur avec le champ de recherche
+          playerSearch.addEventListener("input", (event) => {
+              const query = event.target.value.toLowerCase();
+              const filteredRows = rows.filter(row =>
+                  row.Player.toLowerCase().includes(query)
+              );
+              renderTable(filteredRows);
+              const activeColumns = Array.from(
+                  checkboxFilters.querySelectorAll("input[type='checkbox']:checked")
+              ).map(checkbox => checkbox.dataset.column);
+
+              document.querySelectorAll("#data-table th, #data-table td").forEach(cell => {
+                  if (cell.dataset.header && !activeColumns.includes(cell.dataset.header)) {
+                      cell.style.display = "none"; // Masquer
+                  } else {
+                      cell.style.display = ""; // Afficher
+                  }
+              });
+          });
+      })
+      .catch(error => console.error("Erreur lors du chargement du CSV :", error));
 </script>
 
 </body>
