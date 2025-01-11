@@ -2,215 +2,242 @@
 <html class="no-js" lang="">
 
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title></title>
-  <link rel="stylesheet" href="/css/style.css">
-  <link rel="stylesheet" href="/css/app.css">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title></title>
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="/css/app.css">
 
-  <meta name="description" content="">
+    <meta name="description" content="">
 
-  <meta property="og:title" content="">
-  <meta property="og:type" content="">
-  <meta property="og:url" content="">
-  <meta property="og:image" content="">
-  <meta property="og:image:alt" content="">
+    <meta property="og:title" content="">
+    <meta property="og:type" content="">
+    <meta property="og:url" content="">
+    <meta property="og:image" content="">
+    <meta property="og:image:alt" content="">
 
-  <link rel="icon" href="/favicon.ico" sizes="any">
-  <link rel="icon" href="/icon.svg" type="image/svg+xml">
-  <link rel="apple-touch-icon" href="/icon.png">
+    <link rel="icon" href="/favicon.ico" sizes="any">
+    <link rel="icon" href="/icon.svg" type="image/svg+xml">
+    <link rel="apple-touch-icon" href="/icon.png">
 
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.3/css/bulma.min.css">
-  <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
-  <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.3/css/bulma.min.css">
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
 
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.8.1/slick.min.css">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.8.1/slick-theme.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.8.1/slick.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.8.1/slick-theme.min.css">
 
-  <link rel="manifest" href="site.webmanifest">
-  <meta name="theme-color" content="#fafafa">
+    <link rel="manifest" href="site.webmanifest">
+    <meta name="theme-color" content="#fafafa">
 </head>
 
 <body>
 
 
-  <style>
-    table {
-        max-width: 90%; /* Limite la largeur maximale */
-        margin: auto; /* Centre le tableau */
-        font-size: 0.85rem; /* Réduit la taille du texte */
-    }
+    <style>
+        table {
+            max-width: 90%;
+            /* Limite la largeur maximale */
+            margin: auto;
+            /* Centre le tableau */
+            font-size: 0.85rem;
+            /* Réduit la taille du texte */
+        }
 
-    th, td {
-        padding: 0.5rem; /* Réduit les marges internes des cellules */
-        text-align: center; /* Centre le texte dans les colonnes */
-    }
+        th,
+        td {
+            padding: 0.5rem;
+            /* Réduit les marges internes des cellules */
+            text-align: center;
+            /* Centre le texte dans les colonnes */
+        }
 
-    .table-container {
-        overflow-x: auto; /* Ajoute un défilement horizontal si nécessaire */
-    }
+        .table-container {
+            overflow-x: auto;
+            /* Ajoute un défilement horizontal si nécessaire */
+        }
 
-    .filter-section {
-        margin-bottom: 1rem;
-        display: flex;
-        flex-wrap: wrap;
-        gap: 1rem;
-        justify-content: center;
-    }
+        .filter-section {
+            margin-bottom: 1rem;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+            justify-content: center;
+        }
 
-    .search-bar {
-        max-width: 300px;
-    }
-</style>
+        .search-bar {
+            max-width: 300px;
+        }
+    </style>
 
-<section class="section">
-  <div class="container">
-      <h1 class="title">Résultats des Joueurs</h1>
+    <section class="section">
+        <div class="container">
+            <h1 class="title">Résultats des Joueurs</h1>
 
-      <!-- Section de filtres -->
-      <div class="filter-section">
-          <!-- Champ de recherche -->
-          <input class="input search-bar" type="text" id="playerSearch" placeholder="Rechercher un joueur...">
-          
-          <!-- Checkboxes -->
-          <div id="checkboxFilters"></div>
-      </div>
+            <!-- Section de filtres -->
+            <div class="filter-section">
+                <!-- Champ de recherche -->
+                <input class="input search-bar" type="text" id="playerSearch" placeholder="Rechercher un joueur...">
 
-      <!-- Tableau -->
-      <div class="table-container">
-          <table class="table is-bordered is-striped is-hoverable is-fullwidth " id="data-table">
-              <thead>
-                  <!-- Les en-têtes seront insérés dynamiquement -->
-              </thead>
-              <tbody>
-                  <!-- Les lignes de données seront insérées ici -->
-              </tbody>
-          </table>
-      </div>
-  </div>
-</section>
+                <!-- Checkboxes -->
+                <div id="checkboxFilters"></div>
+            </div>
 
-<script>
-  // Fonction pour convertir CSV en JSON
-  function csvToJson(csv) {
-      const lines = csv.trim().split("\n");
-      const headers = lines[0].split(",");
-      return {
-          headers: headers.map(header => header.trim()),
-          rows: lines.slice(1).map(line => {
-              const values = line.split(",");
-              return headers.reduce((obj, header, index) => {
-                  obj[header.trim()] = values[index].trim();
-                  return obj;
-              }, {});
-          })
-      };
-  }
+            <!-- Tableau -->
+            <div class="table-container">
+                <table class="table is-bordered is-striped is-hoverable is-fullwidth " id="data-table">
+                    <thead>
+                        <!-- Les en-têtes seront insérés dynamiquement -->
+                    </thead>
+                    <tbody>
+                        <!-- Les lignes de données seront insérées ici -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </section>
 
-  // Fonction pour calculer la moyenne des temps d'un joueur
-  function calculateAverage(row, timeHeaders) {
-      const times = timeHeaders.map(header => parseFloat(row[header]) || 0); // Convertir en nombres
-      const validTimes = times.filter(time => time > 0); // Exclure les valeurs invalides
-      return validTimes.length ? (validTimes.reduce((a, b) => a + b, 0) / validTimes.length).toFixed(3) : "N/A";
-  }
+    <script>
+        // Fonction pour convertir CSV en JSON
+        function csvToJson (csv)
+        {
+            const lines = csv.trim().split("\n");
+            const headers = lines[0].split(",");
+            return {
+                headers: headers.map(header => header.trim()),
+                rows: lines.slice(1).map(line =>
+                {
+                    const values = line.split(",");
+                    return headers.reduce((obj, header, index) =>
+                    {
+                        obj[header.trim()] = values[index].trim();
+                        return obj;
+                    }, {});
+                })
+            };
+        }
 
-  // Charger le CSV
-  fetch("/csv/glideLDB.csv")
-      .then(response => response.text())
-      .then(csvText => {
-          const { headers, rows } = csvToJson(csvText);
-          const tableHead = document.querySelector("#data-table thead");
-          const tableBody = document.querySelector("#data-table tbody");
-          const checkboxFilters = document.getElementById("checkboxFilters");
-          const playerSearch = document.getElementById("playerSearch");
+        // Fonction pour calculer la moyenne des temps d'un joueur
+        function calculateAverage (row, timeHeaders)
+        {
+            const times = timeHeaders.map(header => parseFloat(row[header]) || 0); // Convertir en nombres
+            const validTimes = times.filter(time => time > 0); // Exclure les valeurs invalides
+            return validTimes.length ? (validTimes.reduce((a, b) => a + b, 0) / validTimes.length).toFixed(3) : "N/A";
+        }
 
-          // Ajouter la colonne "Time Average" aux en-têtes
-          headers.push("Time Average");
+        // Charger le CSV
+        fetch("/csv/glideLDB.csv")
+            .then(response => response.text())
+            .then(csvText =>
+            {
+                const { headers, rows } = csvToJson(csvText);
+                const tableHead = document.querySelector("#data-table thead");
+                const tableBody = document.querySelector("#data-table tbody");
+                const checkboxFilters = document.getElementById("checkboxFilters");
+                const playerSearch = document.getElementById("playerSearch");
 
-          // Ajouter les en-têtes au tableau
-          const headerRow = document.createElement("tr");
-          headers.forEach(header => {
-              const th = document.createElement("th");
-              th.textContent = header;
-              th.dataset.header = header; // Ajout pour identifier les colonnes
-              headerRow.appendChild(th);
-          });
-          tableHead.appendChild(headerRow);
+                // Ajouter la colonne "Time Average" aux en-têtes
+                headers.push("Time Average");
 
-          // Ajouter les lignes de données au tableau
-          function renderTable(data) {
-              tableBody.innerHTML = ""; // Réinitialiser le tableau
-              const timeHeaders = headers.slice(1, -2); // Exclure "Player", "Platform", et "Time Average"
+                // Ajouter les en-têtes au tableau
+                const headerRow = document.createElement("tr");
+                headers.forEach(header =>
+                {
+                    const th = document.createElement("th");
+                    th.textContent = header;
+                    th.dataset.header = header; // Ajout pour identifier les colonnes
+                    headerRow.appendChild(th);
+                });
+                tableHead.appendChild(headerRow);
 
-              data.forEach(row => {
-                  const tr = document.createElement("tr");
-                  headers.forEach(header => {
-                      const td = document.createElement("td");
+                // Ajouter les lignes de données au tableau
+                function renderTable (data)
+                {
+                    tableBody.innerHTML = ""; // Réinitialiser le tableau
+                    const timeHeaders = headers.slice(1, -2); // Exclure "Player", "Platform", et "Time Average"
 
-                      if (header === "Time Average") {
-                          // Calculer et afficher la moyenne
-                          td.textContent = calculateAverage(row, timeHeaders);
-                      } else {
-                          td.textContent = row[header] || "";
-                      }
+                    data.forEach(row =>
+                    {
+                        const tr = document.createElement("tr");
+                        headers.forEach(header =>
+                        {
+                            const td = document.createElement("td");
 
-                      td.dataset.header = header; // Ajout pour les filtres
-                      tr.appendChild(td);
-                  });
-                  tableBody.appendChild(tr);
-              });
-          }
+                            if (header === "Time Average")
+                            {
+                                // Calculer et afficher la moyenne
+                                td.textContent = calculateAverage(row, timeHeaders);
+                            } else
+                            {
+                                td.textContent = row[header] || "";
+                            }
 
-          // Initialiser le tableau
-          renderTable(rows);
+                            td.dataset.header = header; // Ajout pour les filtres
+                            tr.appendChild(td);
+                        });
+                        tableBody.appendChild(tr);
+                    });
+                }
 
-          // Ajouter les checkboxes pour les colonnes
-          headers.slice(1, -2).forEach(header => { // Sauf "Player", "Platform", et "Time Average"
-              const checkbox = document.createElement("label");
-              checkbox.className = "checkbox";
-              checkbox.innerHTML = `
+                // Initialiser le tableau
+                renderTable(rows);
+
+                // Ajouter les checkboxes pour les colonnes
+                headers.slice(1, -2).forEach(header =>
+                { // Sauf "Player", "Platform", et "Time Average"
+                    const checkbox = document.createElement("label");
+                    checkbox.className = "checkbox";
+                    checkbox.innerHTML = `
                   <input type="checkbox" checked data-column="${header}">
                   ${header}
               `;
-              checkboxFilters.appendChild(checkbox);
-          });
+                    checkboxFilters.appendChild(checkbox);
+                });
 
-          // Filtrer les colonnes avec les checkboxes
-          checkboxFilters.addEventListener("change", () => {
-              const activeColumns = Array.from(
-                  checkboxFilters.querySelectorAll("input[type='checkbox']:checked")
-              ).map(checkbox => checkbox.dataset.column);
+                // Filtrer les colonnes avec les checkboxes
+                checkboxFilters.addEventListener("change", () =>
+                {
+                    const activeColumns = Array.from(
+                        checkboxFilters.querySelectorAll("input[type='checkbox']:checked")
+                    ).map(checkbox => checkbox.dataset.column);
 
-              document.querySelectorAll("#data-table th, #data-table td").forEach(cell => {
-                  if (cell.dataset.header && !activeColumns.includes(cell.dataset.header)) {
-                      cell.style.display = "none"; // Masquer
-                  } else {
-                      cell.style.display = ""; // Afficher
-                  }
-              });
-          });
+                    document.querySelectorAll("#data-table th, #data-table td").forEach(cell =>
+                    {
+                        if (cell.dataset.header && !activeColumns.includes(cell.dataset.header))
+                        {
+                            cell.style.display = "none"; // Masquer
+                        } else
+                        {
+                            cell.style.display = ""; // Afficher
+                        }
+                    });
+                });
 
-          // Filtrer par joueur avec le champ de recherche
-          playerSearch.addEventListener("input", (event) => {
-              const query = event.target.value.toLowerCase();
-              const filteredRows = rows.filter(row =>
-                  row.Player.toLowerCase().includes(query)
-              );
-              renderTable(filteredRows);
-              const activeColumns = Array.from(
-                  checkboxFilters.querySelectorAll("input[type='checkbox']:checked")
-              ).map(checkbox => checkbox.dataset.column);
+                // Filtrer par joueur avec le champ de recherche
+                playerSearch.addEventListener("input", (event) =>
+                {
+                    const query = event.target.value.toLowerCase();
+                    const filteredRows = rows.filter(row =>
+                        row.Player.toLowerCase().includes(query)
+                    );
+                    renderTable(filteredRows);
+                    const activeColumns = Array.from(
+                        checkboxFilters.querySelectorAll("input[type='checkbox']:checked")
+                    ).map(checkbox => checkbox.dataset.column);
 
-              document.querySelectorAll("#data-table th, #data-table td").forEach(cell => {
-                  if (cell.dataset.header && !activeColumns.includes(cell.dataset.header)) {
-                      cell.style.display = "none"; // Masquer
-                  } else {
-                      cell.style.display = ""; // Afficher
-                  }
-              });
-          });
-      })
-      .catch(error => console.error("Erreur lors du chargement du CSV :", error));
-</script>
+                    document.querySelectorAll("#data-table th, #data-table td").forEach(cell =>
+                    {
+                        if (cell.dataset.header && !activeColumns.includes(cell.dataset.header))
+                        {
+                            cell.style.display = "none"; // Masquer
+                        } else
+                        {
+                            cell.style.display = ""; // Afficher
+                        }
+                    });
+                });
+            })
+            .catch(error => console.error("Erreur lors du chargement du CSV :", error));
+    </script>
 
 </body>

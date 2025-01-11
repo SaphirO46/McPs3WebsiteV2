@@ -38,37 +38,83 @@
 			/* Limite la largeur maximale */
 			margin: auto;
 			/* Centre le tableau */
-			font-size: 0.85rem;
+			font-size: 0.70rem;
 			/* Réduit la taille du texte */
+		}
+
+		.input-ldb-player {
+			max-width: 60%;
+			margin: auto;
+			display: flex;
+			justify-content: center;
 		}
 	</style>
 
 
 	<iframe src="/header.html" style="width: 100%; height: 50px" class="header-iframe"></iframe>
-
+	<br>
+	<br>
+	<input class="input is-rounded is-medium input-ldb-player" id="input-ldb-player-id" type="text"
+		placeholder="Search Player" />
+	<br>
+	<br>
+	<div id="advancedFilterGlide" class="container">
+		<div class="notification is-info">
+			Advenced filters
+			<form id="checkboxForm">
+				<label><input type="checkbox" id="headerCheckbox" value="rank"> Rank</label>
+				<label><input type="checkbox" id="headerCheckbox" value="Player"> Player</label>
+				<label><input type="checkbox" id="headerCheckbox" value="Cavern"> Cavern</label>
+				<label><input type="checkbox" id="headerCheckbox" value="Temple"> Temple</label>
+				<label><input type="checkbox" id="headerCheckbox" value="Canyon"> Canyon</label>
+				<label><input type="checkbox" id="headerCheckbox" value="Kraken"> Kraken</label>
+				<label><input type="checkbox" id="headerCheckbox" value="Yeti"> Yeti</label>
+				<label><input type="checkbox" id="headerCheckbox" value="Dragon"> Dragon</label>
+				<br>
+				<label><input type="checkbox" id="headerCheckbox" value="Shrunk"> Shrunk</label>
+				<label><input type="checkbox" id="headerCheckbox" value="Mobs"> Mobs</label>
+				<label><input type="checkbox" id="headerCheckbox" value="Body"> Body</label>
+				<label><input type="checkbox" id="headerCheckbox" value="Excalibur"> Excalibur</label>
+				<label><input type="checkbox" id="headerCheckbox" value="Icarus"> Icarus</label>
+				<label><input type="checkbox" id="headerCheckbox" value="Celts"> Celts</label>
+				<label><input type="checkbox" id="headerCheckbox" value="average"> Average</label>
+				<label><input type="checkbox" id="headerCheckbox" value="ttTime"> TT-Time</label>
+				<label><input type="checkbox" id="headerCheckbox" value="Platform"> Platform</label>
+				<label><input type="checkbox" id="headerCheckbox" value="Division"> Division</label>
+			</form>
+			<article class="message">
+				<div class="message-body">
+					If you remove maps with the advenced filter, the average color case and division may not be correct
+					(Dev need to fix this)
+				</div>
+			</article>
+		</div>
+	</div>
+	<br>
+	<br>
 
 	<div class="table-container">
 		<table class="table is-striped is-hoverable is-fullwidth tab-ldb-glide" id="data-table">
 			<thead>
 				<tr>
-					<th>Rank</th>
-					<th>Player</th>
-					<th>Cavern</th>
-					<th>Temple</th>
-					<th>Canyon</th>
-					<th>Kraken</th>
-					<th>Yeti</th>
-					<th>Dragon</th>
-					<th>Shrunk</th>
-					<th>Mobs</th>
-					<th>Body</th>
-					<th>Excalibur</th>
-					<th>Icarus</th>
-					<th>Celts</th>
-					<th>Average</th>
-					<th>TT-Time</th>
-					<th>Plateform</th>
-					<th>Division</th>
+					<th value="rank">Rank</th>
+					<th value="Player">Player</th>
+					<th value="Cavern">Cavern</th>
+					<th value="Temple">Temple</th>
+					<th value="Canyon">Canyon</th>
+					<th value="Kraken">Kraken</th>
+					<th value="Yeti">Yeti</th>
+					<th value="Dragon">Dragon</th>
+					<th value="Shrunk">Shrunk</th>
+					<th value="Mobs">Mobs</th>
+					<th value="Body">Body</th>
+					<th value="Excalibur">Excalibur</th>
+					<th value="Icarus">Icarus</th>
+					<th value="Celts">Celts</th>
+					<th value="average">Average</th>
+					<th value="ttTime">TT-Time</th>
+					<th value="Platform">Plateform</th>
+					<th value="Division">Division</th>
 				</tr>
 			</thead>
 			<tbody>
@@ -76,9 +122,6 @@
 			</tbody>
 		</table>
 	</div>
-
-
-
 
 	<script>
 		//convert json 
@@ -98,8 +141,20 @@
 			});
 		}
 
+		//----------------------------------------------------------------header
+		//header filters
+
+		function checkAllCheckboxesHeader ()
+		{
+			const headerCheckboxes = document.querySelectorAll("input[type='checkbox']#headerCheckbox");
+			headerCheckboxes.forEach(checkbox =>
+			{
+				checkbox.checked = true; // Coche chaque case
+			});
+		}
+
 		//----------------------------------------------------------------
-		//Add data to json
+		//modify data to json
 
 		function addAverageTimes (data, keys)
 		{
@@ -121,13 +176,8 @@
 				return player;
 			});
 		}
-		function addTtTimeByJson (data)
+		function addTtTimeByJson (data, mapKeys)
 		{
-			// Les noms des clés représentant les cartes
-			const mapKeys = [
-				"Cavern", "Kraken", "Yeti", "Dragon", "Temple", "Shrunk",
-				"Mobs", "Body", "Canyon", "Excalibur", "Icarus", "Celts"
-			];
 
 			data.forEach(player =>
 			{
@@ -143,6 +193,20 @@
 			});
 
 			return data;
+		}
+
+		function removeKeysFromJSON (jsonArray, keysToRemove)
+		{
+			return jsonArray.map(player =>
+			{
+				// Crée une copie de l'objet pour éviter de modifier l'original
+				const updatedPlayer = { ...player };
+				keysToRemove.forEach(key =>
+				{
+					delete updatedPlayer[key];
+				});
+				return updatedPlayer;
+			});
 		}
 
 		//----------------------------------------------------------------
@@ -350,8 +414,8 @@
 		function timeToSeconds (time)
 		{
 			const parts = time.split(":"); // Sépare les minutes et les secondes
-			const minutes = parseInt(parts[0], 10); // Convertit les minutes en nombre
-			const seconds = parseFloat(parts[1]); // Convertit les secondes en nombre (décimal)
+			const minutes = parseInt(parts[0], 10); // Convertit les minutes en no
+			const seconds = parseFloat(parts[1]); // Convertit les secondes en no (décimal)
 			return minutes * 60 + seconds; // Convertit tout en secondes
 		}
 
@@ -374,70 +438,175 @@
 
 
 		//----------------------------------------------------------------
-		//Preparation du Json final. 
+		//Preparation du Json et data table final. 
+		function filterPlayersByName (players, pseudo)
+		{
+			return players.filter(player => player.Player.toLowerCase().includes(pseudo.toLowerCase()));
+		}
 
-		fetch('/csv/glideLDB.csv') // Remplacez par le chemin correct vers votre fichier CSV
-			.then(response =>
+		function toggleTableHeadersByValues (tableId, columnValues)
+		{
+			// Récupère le tableau par son ID
+			const table = document.getElementById(tableId);
+
+			if (!table)
 			{
-				if (!response.ok) throw new Error("Erreur de chargement du fichier CSV");
-				return response.text();
-			})
-			.then(csvText =>
+				console.error('Table not found');
+				return;
+			}
+
+			// Récupère toutes les cellules <th> dans le header du tableau
+			const headers = table.querySelectorAll('th');
+
+			// Parcours chaque <th>
+			headers.forEach(header =>
 			{
-				fetch('/csv/glideRank.json') // prend le json sa mere
-					.then(response =>
-					{
-						if (!response.ok) throw new Error("Erreur de chargement du fichier json");
-						return response.json();
-					})
-					.then(glideRankyRanky =>
-					{
-						glideRankyRanky = glideRankyRanky.gliderankyranky
-						console.log(glideRankyRanky)
+				// Récupère la valeur de l'attribut 'value' dans le <th>
+				const headerValue = header.getAttribute('value');
 
-						const timeKeys = ["Cavern", "Temple", "Dragon", "Body", "Canyon", "Celts", "Excalibur", "Icarus", "Kraken", "Mobs", "Shrunk", "Yeti"];
-						const jsonData = csvToJson(csvText);
-						let jsonDataWithAverages = addAverageTimes(jsonData, timeKeys);
-						jsonDataWithAverages = addTtTimeByJson(jsonDataWithAverages);
-						const sortedData = sortByTime(jsonDataWithAverages, "average");
-						const rankedData = addRankByJson(sortedData);
-						console.log(rankedData);
-						console.log(jsonData); // Affiche le JSON dans la console
+				// Vérifie si la valeur est dans le tableau columnValues
+				if (columnValues.includes(headerValue))
+				{
+					// Si la valeur est dans le tableau, affiche le <th>
+					header.style.display = '';
+				} else
+				{
+					// Si la valeur n'est pas dans le tableau, cache le <th>
+					header.style.display = 'none';
+				}
+			});
+		}
 
 
 
-						//creeation du tableau
-						// Insérer les données dans le tableau
-						const tbody = document.querySelector("#data-table tbody");
-
-						sortedData.forEach(row =>
+		function createGlideTable (headerColumnsTable, playerSearch, keysMapsRemoved)
+		{
+			fetch('/csv/glideLDB.csv') // Remplacez par le chemin correct vers votre fichier CSV
+				.then(response =>
+				{
+					if (!response.ok) throw new Error("Erreur de chargement du fichier CSV");
+					return response.text();
+				})
+				.then(csvText =>
+				{
+					fetch('/csv/glideRank.json') // prend le json sa mere
+						.then(response =>
 						{
-							const tr = document.createElement("tr");
-							for (const key of ["rank", "Player", "Cavern", "Temple", "Canyon", "Kraken", "Yeti", "Dragon", "Shrunk", "Mobs", "Body", "Excalibur", "Icarus", "Celts", "average", "ttTime", "Platform", "Division"])
+							if (!response.ok) throw new Error("Erreur de chargement du fichier json");
+							return response.json();
+						})
+						.then(glideRankyRanky =>
+						{
+							glideRankyRanky = glideRankyRanky.gliderankyranky
+							const timeKeys = ["Cavern", "Temple", "Dragon", "Body", "Canyon", "Celts", "Excalibur", "Icarus", "Kraken", "Mobs", "Shrunk", "Yeti"];
+							const timeKeysToRemove = keysMapsRemoved;
+							const finalTimeKeys = timeKeys.filter(key => !timeKeysToRemove.includes(key));
+							const jsonData = csvToJson(csvText);
+							let finalDataTable = jsonData;
+							finalDataTable = removeKeysFromJSON(finalDataTable, timeKeysToRemove);
+							console.log("check1");
+							finalDataTable = addAverageTimes(finalDataTable, finalTimeKeys);
+							console.log("check2");
+							finalDataTable = addTtTimeByJson(finalDataTable, finalTimeKeys);
+							console.log("check3");
+							finalDataTable = sortByTime(finalDataTable, "average");
+							console.log("check4");
+							finalDataTable = addRankByJson(finalDataTable);
+							console.log("check5");
+							finalDataTable = filterPlayersByName(finalDataTable, playerSearch);
+							console.log("check6");
+							console.log(finalDataTable);
+
+
+
+							//creeation du tableau
+							// Insérer les données dans le tableau
+							const tbody = document.querySelector("#data-table tbody");
+							tbody.innerHTML = ""; // Réinitialiser le tableau
+
+							finalDataTable.forEach(row =>
 							{
-								const td = document.createElement("td");
-								td.textContent = row[key] || ""; // Si la valeur est vide, insérer une chaîne vide
-
-
-								glideRankyRanky.forEach((map) =>
+								const tr = document.createElement("tr");
+								for (const key of headerColumnsTable)
 								{
-									//adding data to table like plateform img, division, colors
-									ColoredCaseByTime(key, row[key], td, map.Map, glideRankyRanky);
-									AddingDivisionToTable(key, row["average"], td, map.Map, glideRankyRanky, row["rank"]);
-									AddingPlateformLogoToTable(key, row["Platform"], td, map.Map);
-								})
-
-								tr.appendChild(td);
-							}
-							tbody.appendChild(tr);
-						});
-
-					})
-					.catch(error => console.error("Erreur :", error));
+									const td = document.createElement("td");
+									td.textContent = row[key] || ""; // Si la valeur est vide, insérer une chaîne vide
 
 
-			})
-			.catch(error => console.error("Erreur :", error));
+									glideRankyRanky.forEach((map) =>
+									{
+										//adding data to table like plateform img, division, colors
+										ColoredCaseByTime(key, row[key], td, map.Map, glideRankyRanky);
+										AddingDivisionToTable(key, row["average"], td, map.Map, glideRankyRanky, row["rank"]);
+										AddingPlateformLogoToTable(key, row["Platform"], td, map.Map);
+									})
+
+									tr.appendChild(td);
+								}
+								tbody.appendChild(tr);
+							});
+
+						})
+						.catch(error => console.error("Erreur :", error));
+
+
+				})
+				.catch(error => console.error("Erreur :", error));
+		}
+
+
+
+		// Fonction pour récupérer les valeurs cochées des cases avec id="headerCheckbox"
+		function getCheckedValues ()
+		{
+			const checkedValues = [];
+			headerCheckboxes.forEach(checkbox =>
+			{
+				if (checkbox.checked)
+				{
+					checkedValues.push(checkbox.value);
+				}
+			});
+			return checkedValues;
+		}
+
+
+
+		//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+		//---------------------------------------------------------------------------------------------
+		//*********************************************************************************************
+		//final actions
+
+		createGlideTable(["rank", "Player", "Cavern", "Temple", "Canyon", "Kraken", "Yeti", "Dragon", "Shrunk", "Mobs", "Body", "Excalibur", "Icarus", "Celts", "average", "ttTime", "Platform", "Division"], "", []);
+		checkAllCheckboxesHeader();
+
+		const onlyMapKeys = ["Cavern", "Temple", "Canyon", "Kraken", "Yeti", "Dragon", "Shrunk", "Mobs", "Body", "Excalibur", "Icarus", "Celts"];
+		const outputTable = document.getElementById("outputTable");
+		// Sélectionne uniquement les cases avec l'id "headerCheckbox"
+		const searchBar = document.getElementById("input-ldb-player-id");
+		// Sélectionne uniquement les cases avec l'id "headerCheckbox"
+		const headerCheckboxes = document.querySelectorAll("input[type='checkbox']#headerCheckbox");
+		// Ajout d'un écouteur d'événements sur chaque checkbox correspondante
+		headerCheckboxes.forEach(checkbox =>
+		{
+			checkbox.addEventListener("change", () =>
+			{
+				const updatedTable = getCheckedValues();
+				let matchingKeys = updatedTable.filter(key => onlyMapKeys.includes(key));
+				matchingKeys = onlyMapKeys.filter(key => !matchingKeys.includes(key));
+				createGlideTable(updatedTable, searchBar.value, matchingKeys);
+				toggleTableHeadersByValues('data-table', updatedTable);
+			});
+		});
+
+		searchBar.addEventListener("input", () =>
+		{
+			const updatedTable = getCheckedValues();
+			let matchingKeys = updatedTable.filter(key => onlyMapKeys.includes(key));
+			matchingKeys = onlyMapKeys.filter(key => !matchingKeys.includes(key));
+			createGlideTable(updatedTable, searchBar.value, matchingKeys);
+			toggleTableHeadersByValues('data-table', updatedTable);
+		});
 
 	</script>
 
