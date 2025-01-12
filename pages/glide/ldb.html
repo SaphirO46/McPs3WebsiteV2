@@ -59,6 +59,46 @@
 		.img-division-info {
 			max-width: 3.3em;
 		}
+
+		.beginner-bg-color {
+			background-color: rgb(252, 149, 149);
+		}
+
+		.intermediate-bg-color {
+			background-color: rgb(244, 176, 176);
+		}
+
+		.skilled-bg-color {
+			background-color: rgb(247, 163, 193);
+		}
+
+		.pro-bg-color {
+			background-color: rgb(229, 167, 242);
+		}
+
+		.expert-bg-color {
+			background-color: rgb(184, 141, 249);
+		}
+
+		.master-bg-color {
+			background-color: rgb(176, 164, 249);
+		}
+
+		.legend-bg-color {
+			background-color: rgb(142, 158, 247);
+		}
+
+		.elite-bg-color {
+			background-color: rgb(142, 180, 247);
+		}
+
+		.champion-bg-color {
+			background-color: #c8f7f6;
+		}
+
+		.unknow-bg-color {
+			background-color: rgb(242, 243, 250);
+		}
 	</style>
 
 
@@ -177,40 +217,40 @@
 				</thead>
 				<tbody>
 					<tr>
-						<th style="background-color: rgb(252, 149, 149); " class="division-info-average-cases">
+						<th class="division-info-average-cases beginner-bg-color">
 							<center>
 								Beginner<br>
 								< 1:31.167 </center>
 						</th>
-						<th style="background-color: rgb(244, 176, 176);" class="division-info-average-cases">
+						<th class="division-info-average-cases intermediate-bg-color">
 							<center>intermediate<br>
 								< 1:23.500 </center>
 						</th>
-						<th style="background-color: rgb(247, 163, 193);" class="division-info-average-cases">
+						<th class="division-info-average-cases skilled-bg-color">
 							<center>Skilled<br>
 								< 1:18.292 </center>
 						</th>
-						<th style="background-color: rgb(229, 167, 242);" class="division-info-average-cases">
+						<th class="division-info-average-cases pro-bg-color">
 							<center>Pro<br>
 								< 1:14.771 </center>
 						</th>
-						<th style="background-color: rgb(184, 141, 249);" class="division-info-average-cases">
+						<th class="division-info-average-cases expert-bg-color">
 							<center>Expert<br>
 								< 1:12.250 </center>
 						</th>
-						<th style="background-color: rgb(176, 164, 249);" class="division-info-average-cases">
+						<th class="division-info-average-cases mas master-bg-color">
 							<center>Master<br>
 								< 1:10.500 </center>
 						</th>
-						<th style="background-color: rgb(158, 203, 250);" class="division-info-average-cases">
+						<th class="division-info-average-cases legend-bg-color">
 							<center>Legend<br>
 								< 1:08.917 </center>
 						</th>
-						<th style="background-color: rgb(142, 158, 247);" class="division-info-average-cases">
+						<th class="division-info-average-cases elite-bg-color">
 							<center>Elite<br>
 								< 1:07.345 </center>
 						</th>
-						<th style="background-color: #c8f7f6;" class="division-info-average-cases">
+						<th class="division-info-average-cases champion-bg-color">
 							<center>Champion<br>
 								< ALL </center>
 						</th>
@@ -333,7 +373,7 @@
 
 		function ColoredCaseByTime (key, valueCell, td, mapSelected, json)
 		{
-			let finalColor = [0, 0, 0];
+			let finalColor = "unknow-bg-color";
 			const glideRankyRanky = json;
 
 
@@ -355,46 +395,46 @@
 				// Si le temps est supérieur au seuil, colorier la cellule en bleu
 				if (cellTime > timeRankB)
 				{
-					finalColor = [220, 220, 220];
+					finalColor = "unknow-bg-color";
 				}
 				else if (cellTime > timeRankI)
 				{
-					finalColor = [252, 149, 149];
+					finalColor = "beginner-bg-color";
 				}
 				else if (cellTime > timeRankS)
 				{
-					finalColor = [244, 176, 176];
+					finalColor = "intermediate-bg-color";
 				}
 				else if (cellTime > timeRankP)
 				{
-					finalColor = [247, 163, 193];
+					finalColor = "skilled-bg-color";
 				}
 				else if (cellTime > timeRankX)
 				{
-					finalColor = [229, 167, 242];
+					finalColor = "pro-bg-color";
 				}
 				else if (cellTime > timeRankM)
 				{
-					finalColor = [184, 141, 249];
+					finalColor = "expert-bg-color";
 				}
 				else if (cellTime > timeRankL)
 				{
-					finalColor = [176, 164, 249];
+					finalColor = "master-bg-color";
 				}
 				else if (cellTime < timeRankE)
 				{
-					finalColor = [142, 158, 247];
+					finalColor = "elite-bg-color";
 				}
 				else if (cellTime >= timeRankE)
 				{
-					finalColor = [158, 203, 250];
+					finalColor = "legend-bg-color";
 				}
 				else
 				{
-					finalColor = [0, 0, 0];
+					finalColor = "unknow-bg-color";
 				}
 
-				td.style.backgroundColor = "rgb(" + finalColor[0] + "," + finalColor[1] + "," + finalColor[2] + ")";
+				td.classList.add(finalColor);
 
 
 
@@ -407,7 +447,7 @@
 		//	--+++++--- Division adding to table-+++++++-----
 		function AddingDivisionToTable (key, valueCell, td, mapSelected, json, rank)
 		{
-			let finalColor = [0, 0, 0];
+			let finalColor = "unknow-bg-color";
 			let finalDivision = "/img/glide/beginner.webp";
 			const glideRankyRanky = json;
 			if (key == "division" || key == "Division")
@@ -429,53 +469,53 @@
 				if (cellTime > timeRankB)
 				{
 					finalDivision = "/img/glide/beginner.webp";
-					finalColor = [220, 220, 220];
+					finalColor = "unknow-bg-color";
 				}
 				else if (cellTime > timeRankI)
 				{
 					finalDivision = "/img/glide/beginner.webp";
-					finalColor = [252, 149, 149];
+					finalColor = "beginner-bg-color";
 				}
 				else if (cellTime > timeRankS)
 				{
 					finalDivision = "/img/glide/intermediate.webp";
-					finalColor = [244, 176, 176];
+					finalColor = "intermediate-bg-color";
 
 				}
 				else if (cellTime > timeRankP)
 				{
 					finalDivision = "/img/glide/skilled.webp";
-					finalColor = [247, 163, 193];
+					finalColor = "skilled-bg-color";
 
 				}
 				else if (cellTime > timeRankX)
 				{
 					finalDivision = "/img/glide/pro.webp";
-					finalColor = [229, 167, 242];
+					finalColor = "pro-bg-color";
 
 				}
 				else if (cellTime > timeRankM)
 				{
 					finalDivision = "/img/glide/expert.webp";
-					finalColor = [184, 141, 249];
+					finalColor = "expert-bg-color";
 
 				}
 				else if (cellTime > timeRankL)
 				{
 					finalDivision = "/img/glide/master.webp";
-					finalColor = [176, 164, 249];
+					finalColor = "master-bg-color";
 
 				}
 				else if (cellTime < timeRankE)
 				{
 					finalDivision = "/img/glide/elite.webp";
-					finalColor = [142, 158, 247];
+					finalColor = "elite-bg-color";
 
 				}
 				else if (cellTime >= timeRankE)
 				{
 					finalDivision = "/img/glide/legend.webp";
-					finalColor = [158, 203, 250];
+					finalColor = "legend-bg-color";
 
 				}
 				else
@@ -485,10 +525,10 @@
 				if (rank == "1")
 				{
 					finalDivision = "/img/glide/champion.webp";
-					finalColor = [200, 247, 246];
+					finalColor = "champion-bg-color";
 				}
 
-				td.style.backgroundColor = "rgb(" + finalColor[0] + "," + finalColor[1] + "," + finalColor[2] + ")";
+				td.classList.add(finalColor);
 				td.innerHTML = '<center><img style="max-width:2.3em" src="' + finalDivision + '"></center>'
 			}
 
