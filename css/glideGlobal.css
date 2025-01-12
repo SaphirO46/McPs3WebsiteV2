@@ -1,0 +1,66 @@
+.tab-ldb-glide {
+    max-width: 90%;
+    margin: auto;
+    font-size: 0.70rem;
+}
+
+.input-ldb-player {
+    max-width: 60%;
+    margin: auto;
+    display: flex;
+    justify-content: center;
+}
+
+.division-info-fixed {
+    position: fixed;
+    bottom: 0;
+    left: 1em;
+}
+
+.division-info-average-cases {
+    font-size: 0.8em;
+}
+
+.img-division-info {
+    max-width: 3.3em;
+}
+
+.beginner-bg-color {
+    background-color: rgb(252, 149, 149);
+}
+
+.intermediate-bg-color {
+    background-color: rgb(244, 176, 176);
+}
+
+.skilled-bg-color {
+    background-color: rgb(247, 163, 193);
+}
+
+.pro-bg-color {
+    background-color: rgb(229, 167, 242);
+}
+
+.expert-bg-color {
+    background-color: rgb(184, 141, 249);
+}
+
+.master-bg-color {
+    background-color: rgb(176, 164, 249);
+}
+
+.legend-bg-color {
+    background-color: rgb(142, 158, 247);
+}
+
+.elite-bg-color {
+    background-color: rgb(142, 180, 247);
+}
+
+.champion-bg-color {
+    background-color: #c8f7f6;
+}
+
+.unknow-bg-color {
+    background-color: rgb(242, 243, 250);
+}
