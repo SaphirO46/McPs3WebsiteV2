@@ -35,11 +35,8 @@
 	<style>
 		.tab-ldb-glide {
 			max-width: 90%;
-			/* Limite la largeur maximale */
 			margin: auto;
-			/* Centre le tableau */
 			font-size: 0.70rem;
-			/* Réduit la taille du texte */
 		}
 
 		.input-ldb-player {
@@ -47,6 +44,20 @@
 			margin: auto;
 			display: flex;
 			justify-content: center;
+		}
+
+		.division-info-fixed {
+			position: fixed;
+			bottom: 0;
+			left: 1em;
+		}
+
+		.division-info-average-cases {
+			font-size: 0.8em;
+		}
+
+		.img-division-info {
+			max-width: 3.3em;
 		}
 	</style>
 
@@ -57,10 +68,12 @@
 	<input class="input is-rounded is-medium input-ldb-player" id="input-ldb-player-id" type="text"
 		placeholder="Search Player" />
 	<br>
-	<br>
+	<div class="notification" id="plusButtoAdvencedFilter">
+		Advenced filters <button onclick="unhideAdvencedFilters()">+</button>
+	</div>
 	<div id="advancedFilterGlide" class="container">
 		<div class="notification is-info">
-			Advenced filters
+			<button class="delete" onclick="hideAdvencedFilters()"></button>
 			<form id="checkboxForm">
 				<label><input type="checkbox" id="headerCheckbox" value="rank"> Rank</label>
 				<label><input type="checkbox" id="headerCheckbox" value="Player"> Player</label>
@@ -84,14 +97,15 @@
 			</form>
 			<article class="message">
 				<div class="message-body">
-					If you remove maps with the advenced filter, the average color case and division may not be correct
+					If you remove maps with the advenced filter, the average color case and division may not be
+					correct
 					(Dev need to fix this)
 				</div>
 			</article>
 		</div>
+		<br>
 	</div>
-	<br>
-	<br>
+	</div>
 
 	<div class="table-container">
 		<table class="table is-striped is-hoverable is-fullwidth tab-ldb-glide" id="data-table">
@@ -123,7 +137,111 @@
 		</table>
 	</div>
 
+	<article class="message is-small division-info-fixed not-on-mobile" id="notificationDivision">
+		<div class="message-header">
+			<p>Division</p>
+			<button class="delete is-small" aria-label="delete" onclick="hideDivisionNotif()"></button>
+		</div>
+		<div class="message-body">
+			<table class="table ">
+				<thead>
+					<tr>
+						<th>
+							<center><img src="/img/glide/beginner.webp" class="img-division-info"></center>
+						</th>
+						<th>
+							<center><img src="/img/glide/intermediate.webp" class="img-division-info"></center>
+						</th>
+						<th>
+							<center><img src="/img/glide/skilled.webp" class="img-division-info"></center>
+						</th>
+						<th>
+							<center><img src="/img/glide/pro.webp" class="img-division-info"></center>
+						</th>
+						<th>
+							<center><img src="/img/glide/expert.webp" class="img-division-info"></center>
+						</th>
+						<th>
+							<center><img src="/img/glide/master.webp" class="img-division-info"></center>
+						</th>
+						<th>
+							<center><img src="/img/glide/legend.webp" class="img-division-info"></center>
+						</th>
+						<th>
+							<center><img src="/img/glide/elite.webp" class="img-division-info"></center>
+						</th>
+						<th>
+							<center><img src="/img/glide/champion.webp" class="img-division-info"></center>
+						</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr>
+						<th style="background-color: rgb(252, 149, 149); " class="division-info-average-cases">
+							<center>
+								Beginner<br>
+								< 1:31.167 </center>
+						</th>
+						<th style="background-color: rgb(244, 176, 176);" class="division-info-average-cases">
+							<center>intermediate<br>
+								< 1:23.500 </center>
+						</th>
+						<th style="background-color: rgb(247, 163, 193);" class="division-info-average-cases">
+							<center>Skilled<br>
+								< 1:18.292 </center>
+						</th>
+						<th style="background-color: rgb(229, 167, 242);" class="division-info-average-cases">
+							<center>Pro<br>
+								< 1:14.771 </center>
+						</th>
+						<th style="background-color: rgb(184, 141, 249);" class="division-info-average-cases">
+							<center>Expert<br>
+								< 1:12.250 </center>
+						</th>
+						<th style="background-color: rgb(176, 164, 249);" class="division-info-average-cases">
+							<center>Master<br>
+								< 1:10.500 </center>
+						</th>
+						<th style="background-color: rgb(158, 203, 250);" class="division-info-average-cases">
+							<center>Legend<br>
+								< 1:08.917 </center>
+						</th>
+						<th style="background-color: rgb(142, 158, 247);" class="division-info-average-cases">
+							<center>Elite<br>
+								< 1:07.345 </center>
+						</th>
+						<th style="background-color: #c8f7f6;" class="division-info-average-cases">
+							<center>Champion<br>
+								< ALL </center>
+						</th>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+	</article>
+
+
 	<script>
+		//notification hidder
+		function hideDivisionNotif ()
+		{
+			let notif = document.getElementById("notificationDivision");
+			notif.style.visibility = "hidden";
+		}
+		function unhideAdvencedFilters ()
+		{
+			let plusButton = document.getElementById("plusButtoAdvencedFilter");
+			let notif = document.getElementById("advancedFilterGlide");
+			plusButton.style.display = "none";
+			notif.style.display = "block";
+		}
+		function hideAdvencedFilters ()
+		{
+			let notif = document.getElementById("advancedFilterGlide");
+			let plusButton = document.getElementById("plusButtoAdvencedFilter");
+			notif.style.display = "none";
+			plusButton.style.display = "block";
+		}
 		//convert json 
 		function csvToJson (csv)
 		{
@@ -579,6 +697,7 @@
 
 		createGlideTable(["rank", "Player", "Cavern", "Temple", "Canyon", "Kraken", "Yeti", "Dragon", "Shrunk", "Mobs", "Body", "Excalibur", "Icarus", "Celts", "average", "ttTime", "Platform", "Division"], "", []);
 		checkAllCheckboxesHeader();
+		hideAdvencedFilters();
 
 		const onlyMapKeys = ["Cavern", "Temple", "Canyon", "Kraken", "Yeti", "Dragon", "Shrunk", "Mobs", "Body", "Excalibur", "Icarus", "Celts"];
 		const outputTable = document.getElementById("outputTable");
