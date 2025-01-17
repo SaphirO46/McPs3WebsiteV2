@@ -44,7 +44,7 @@
 	<div class="notification" id="plusButtoAdvencedFilter">
 		Advenced filters <button onclick="unhideAdvencedFilters()">+</button>
 	</div>
-	<div id="advancedFilterGlide" class="container">
+	<div id="advancedFilterGlide" class="container" style="display: none;">
 		<div class="notification is-info">
 			<button class="delete" onclick="hideAdvencedFilters()"></button>
 			<form id="checkboxForm">
@@ -195,48 +195,6 @@
 
 	<script src="/js/glideGlobal.js"></script>
 	<script src="/js/glide_ldb.js"></script>
-	<script>
 
-		// Fonction pour ajouter des boutons dans la colonne "Player"
-		function addClickTableRedirectParam(tableId,valueColumn,urlToRedirect)
-		{
-			// Sélectionne le tableau
-			const table = document.getElementById(tableId);
-
-			// Trouve l'index de la colonne ayant value="Player"
-			const headers = table.querySelectorAll("thead th");
-			let playerColumnIndex = -1;
-			headers.forEach((header, index) =>
-			{
-				if (header.getAttribute("value") === valueColumn)
-				{
-					playerColumnIndex = index;
-				}
-			});
-
-			// Si la colonne "???" n'est pas trouvée, arrête
-			if (playerColumnIndex === -1)
-			{
-				console.error("Colonne avec value='???' introuvable.");
-				return;
-			}
-
-			// Parcourt les lignes du corps du tableau
-			const rows = table.querySelectorAll("tbody tr");
-			rows.forEach(row =>
-			{
-				// Récupère la cellule de la colonne "Player"
-				const playerCell = row.cells[playerColumnIndex];
-				const playerName = playerCell.textContent.trim();
-
-				row.onclick = function ()
-				{
-					// Redirige vers l'URL avec le paramètre player
-					window.location.href = urlToRedirect + '?player=' + playerName;
-				};
-			});
-		}
-		addClickTableRedirectParam("data-table","Player","/pages/glide/playerGlideProfil.html");
-	</script>
 
 </body>

@@ -31,10 +31,152 @@
 	<meta name="theme-color" content="#fafafa">
 </head>
 
+<style>
+	.container-top {
+		flex-wrap: nowrap;
+		display: flex;
+		justify-content: space-between;
+		flex-wrap: wrap;
+		white-space: nowrap; /* Empêche les blocs de passer à la ligne */
+	}
+
+	.block-top {
+		flex: 1 1 calc(33.33% - 30px);
+		/* Les blocs occupent environ 1/3 de la largeur, en tenant compte des marges */
+		max-width: 30%;
+		background-color: #f0f0f0;
+		padding: 15px;
+		border-radius: 8px;
+		text-align: center;
+		box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+		white-space: nowrap; /* Empêche les blocs de passer à la ligne */
+	}
+
+	.block-top img {
+		max-width: 100%;
+		height: auto;
+		border-radius: 4px;
+		white-space: nowrap; /* Empêche les blocs de passer à la ligne */
+	}
+
+	.block-top p {
+		margin-top: 10px;
+		font-size: 16px;
+		color: #333;
+		white-space: nowrap; /* Empêche les blocs de passer à la ligne */
+	}
+
+	@media (max-width: 768px) {
+		.container-top {
+			flex-wrap: nowrap;
+			/* Empêche les blocs de se placer en colonne, même sur les petits écrans */
+			overflow-x: auto;
+			/* Permet de défiler horizontalement si l'espace est insuffisant */
+		}
+	}
+</style>
+
+<body>
+	<iframe src="/header.html" style="width: 100%; height: 50px" class="header-iframe"></iframe>
+	<section class="hero is-info">
+		<div class="hero-body">
+			<p class="title" id="playerPage">User name</p>
+			<div class="containe-topr">
+				<div class="block-top">
+					<img src="https://via.placeholder.com/150" alt="Image 1">
+					<p>Texte du premier bloc</p>
+				</div>
+				<div class="block-top">
+					<img src="https://via.placeholder.com/150" alt="Image 2">
+					<p>Texte du deuxième bloc</p>
+				</div>
+				<div class="block-top">
+					<img src="https://via.placeholder.com/150" alt="Image 3">
+					<p>Texte du troisième bloc</p>
+				</div>
+			</div>
+
+		</div>
+	</section>
+	<section class="hero">
+		<div class="hero-body">
+			<p class="subtitle">All Map Times</p>
+			<table class="table is-striped is-hoverable is-fullwidth tab-ldb-glide">
+				<thead>
+					<tr>
+						<th value="Cavern">Cavern</th>
+						<th value="Temple">Temple</th>
+						<th value="Canyon">Canyon</th>
+						<th value="Kraken">Kraken</th>
+						<th value="Yeti">Yeti</th>
+						<th value="Dragon">Dragon</th>
+						<th value="Shrunk">Shrunk</th>
+						<th value="Mobs">Mobs</th>
+						<th value="Body">Body</th>
+						<th value="Excalibur">Excalibur</th>
+						<th value="Icarus">Icarus</th>
+						<th value="Celts">Celts</th>
+						<th value="average">Average</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr>
+						<td id="cavernPage">Cavern</td>
+						<td id="templePage">Temple</td>
+						<td id="canyonPage">Canyon</td>
+						<td id="krakenPage">Kraken</td>
+						<td id="yetiPage">Yeti</td>
+						<td id="dragonPage">Dragon</td>
+						<td id="shrunkPage">Shrunk</td>
+						<td id="mobsPage">Mobs</td>
+						<td id="bodyPage">Body</td>
+						<td id="excaliburPage">Excalibur</td>
+						<td id="icarusPage">Icarus</td>
+						<td id="celtsPage">Celts</td>
+						<td id="averagePage">Average</td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+
+	</section>
+	<section class="hero is-link">
+		<div class="hero-body">
+			<p class="title"></p>
+			<p class="subtitle"></p>
+		</div>
+
+	</section>
+</body>
+
+<script src="/js/glideGlobal.js"></script>
 <script>
-const urlParams = new URLSearchParams(window.location.search);
-const players = urlParams.get('player');
-console.log(players)
+	let finalDataTable = [];
+	const urlParams = new URLSearchParams(window.location.search);
+	const players = urlParams.get('player');
+	console.log(players)
+
+	const timeKeys = ["Cavern", "Temple", "Dragon", "Body", "Canyon", "Celts", "Excalibur", "Icarus", "Kraken", "Mobs", "Shrunk", "Yeti"];
+
+	fetch('/csv/glideLDBaerialtorti.csv')
+		.then(response =>
+		{
+			if (!response.ok) throw new Error("Erreur de chargement du fichier CSV");
+			return response.text();
+		})
+		.then(csvText =>
+		{
+			finalDataTable = csvToJson(csvText);
+			finalDataTable = addAverageTimes(finalDataTable, timeKeys);
+			finalDataTable = addTtTimeByJson(finalDataTable, timeKeys);
+			finalDataTable = sortByTime(finalDataTable, "average");
+			finalDataTable = addRankByJson(finalDataTable);
+			finalDataTable = filterPlayersByName(finalDataTable, players);
+
+
+		}
+		);
+
+
+
 </script>
-
-
