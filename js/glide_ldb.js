@@ -1,36 +1,56 @@
-		//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-		//---------------------------------------------------------------------------------------------
-		//*********************************************************************************************
-		//final actions
-
-		createGlideTable(["rank", "Player", "Cavern", "Temple", "Canyon", "Kraken", "Yeti", "Dragon", "Shrunk", "Mobs", "Body", "Excalibur", "Icarus", "Celts", "average", "ttTime", "Platform", "Division"], "", []);
-		checkAllCheckboxesHeader();
-		hideAdvencedFilters();
-
-		const onlyMapKeys = ["Cavern", "Temple", "Canyon", "Kraken", "Yeti", "Dragon", "Shrunk", "Mobs", "Body", "Excalibur", "Icarus", "Celts"];
-		const outputTable = document.getElementById("outputTable");
-		// Sélectionne uniquement les cases avec l'id "headerCheckbox"
-		const searchBar = document.getElementById("input-ldb-player-id");
-		// Sélectionne uniquement les cases avec l'id "headerCheckbox"
-		const headerCheckboxes = document.querySelectorAll("input[type='checkbox']#headerCheckbox");
-		// Ajout d'un écouteur d'événements sur chaque checkbox correspondante
-		headerCheckboxes.forEach(checkbox =>
+//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+//---------------------------------------------------------------------------------------------
+//*********************************************************************************************
+//final actions
+async function start ()
+{
+	try
+	{
+		await createGlideTable(
+			["rank", "Player", "Cavern", "Temple", "Canyon", "Kraken", "Yeti", "Dragon", "Shrunk", "Mobs", "Body", "Excalibur", "Icarus", "Celts", "average", "ttTime", "Platform", "Division"],
+			"",
+			[]
+		);
+		await checkAllCheckboxesHeader();
+		await hideAdvencedFilters();
+		setTimeout(() =>
 		{
-			checkbox.addEventListener("change", () =>
-			{
-				const updatedTable = getCheckedValues();
-				let matchingKeys = updatedTable.filter(key => onlyMapKeys.includes(key));
-				matchingKeys = onlyMapKeys.filter(key => !matchingKeys.includes(key));
-				createGlideTable(updatedTable, searchBar.value, matchingKeys);
-				toggleTableHeadersByValues('data-table', updatedTable);
-			});
-		});
+			addClickTableRedirectParam("data-table", "Player", "/pages/glide/playerGlideProfil.html");
+		}, 0);
+		console.log("Tableau créé avec succès !");
+	} catch (error)
+	{
+		console.error("Une erreur est survenue dans start :", error);
+	}
+}
 
-		searchBar.addEventListener("input", () =>
-		{
-			const updatedTable = getCheckedValues();
-			let matchingKeys = updatedTable.filter(key => onlyMapKeys.includes(key));
-			matchingKeys = onlyMapKeys.filter(key => !matchingKeys.includes(key));
-			createGlideTable(updatedTable, searchBar.value, matchingKeys);
-			toggleTableHeadersByValues('data-table', updatedTable);
-		});
+
+start();
+
+const onlyMapKeys = ["Cavern", "Temple", "Canyon", "Kraken", "Yeti", "Dragon", "Shrunk", "Mobs", "Body", "Excalibur", "Icarus", "Celts"];
+const outputTable = document.getElementById("outputTable");
+// Sélectionne uniquement les cases avec l'id "headerCheckbox"
+const searchBar = document.getElementById("input-ldb-player-id");
+// Sélectionne uniquement les cases avec l'id "headerCheckbox"
+const headerCheckboxes = document.querySelectorAll("input[type='checkbox']#headerCheckbox");
+// Ajout d'un écouteur d'événements sur chaque checkbox correspondante
+headerCheckboxes.forEach(checkbox =>
+{
+	checkbox.addEventListener("change", async () =>
+	{
+		const updatedTable = getCheckedValues();
+		let matchingKeys = updatedTable.filter(key => onlyMapKeys.includes(key));
+		matchingKeys = onlyMapKeys.filter(key => !matchingKeys.includes(key));
+		await createGlideTable(updatedTable, searchBar.value, matchingKeys);
+		await toggleTableHeadersByValues('data-table', updatedTable);
+	});
+});
+
+searchBar.addEventListener("input", async () =>
+{
+	const updatedTable = getCheckedValues();
+	let matchingKeys = updatedTable.filter(key => onlyMapKeys.includes(key));
+	matchingKeys = onlyMapKeys.filter(key => !matchingKeys.includes(key));
+	await createGlideTable(updatedTable, searchBar.value, matchingKeys);
+	await toggleTableHeadersByValues('data-table', updatedTable);
+});
